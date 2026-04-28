@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect, useCallback, useRef } from "react";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   DndContext, closestCenter, PointerSensor,
   useSensor, useSensors, type DragEndEvent,
@@ -9,7 +9,7 @@ import {
   arrayMove, SortableContext, useSortable, horizontalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { Settings2, RotateCcw, GripVertical, Eye, Copy } from "lucide-react";
+import { Settings2, RotateCcw, GripVertical, Copy } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
@@ -256,6 +256,7 @@ function Cell({ colId, op }: { colId: string; op: OpRow }) {
 
 // ── Main component ───────────────────────────────────────────────────────────
 export function OperationsTable({ ops }: { ops: OpRow[] }) {
+  const router = useRouter();
   const [cols, setColsRaw] = useState<ColDef[]>(DEFAULT_COLS);
   const [widths, setWidthsRaw] = useState<Record<string, number>>(DEFAULT_WIDTHS);
   const [hydrated, setHydrated] = useState(false);
@@ -345,18 +346,16 @@ export function OperationsTable({ ops }: { ops: OpRow[] }) {
                 </TableRow>
               )}
               {ops.map(op => (
-                <TableRow key={op.id} className={`group cursor-pointer ${op.type === "CASH_IN" || op.type === "QR_SETTLEMENT" ? "bg-success/[0.04]" : ""}`}>
+                <TableRow
+                  key={op.id}
+                  className={`group cursor-pointer hover:bg-accent/50 ${op.type === "CASH_IN" || op.type === "QR_SETTLEMENT" ? "bg-success/[0.04]" : ""}`}
+                  onClick={() => router.push(`/operations?op=${op.id}`)}
+                >
                   {visible.map(c => <Cell key={c.id} colId={c.id} op={op} />)}
-                  <TableCell className="p-1 w-[60px]">
-                    <div className="flex items-center justify-end gap-0.5">
-                      <Button asChild variant="ghost" size="icon"
-                        className="h-7 w-7 opacity-0 group-hover:opacity-30 hover:!opacity-100 transition-opacity">
-                        <Link href={`/operations?op=${op.id}`} aria-label="Открыть">
-                          <Eye className="h-3.5 w-3.5" />
-                        </Link>
-                      </Button>
+                  <TableCell className="p-1 w-[60px]" onClick={e => e.stopPropagation()}>
+                    <div className="flex items-center justify-end">
                       <Button variant="ghost" size="icon"
-                        className="h-7 w-7 opacity-0 group-hover:opacity-30 hover:!opacity-100 transition-opacity"
+                        className="h-7 w-7 opacity-0 group-hover:opacity-40 hover:!opacity-100 transition-opacity"
                         onClick={() => navigator.clipboard?.writeText(op.id)}
                         aria-label="Скопировать ID">
                         <Copy className="h-3.5 w-3.5" />
