@@ -1,32 +1,6 @@
 export function OrcaLogo({ className = "h-7 w-auto" }: { className?: string }) {
-  return (
-    <svg
-      className={className}
-      viewBox="0 0 100 100"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      aria-label="Орка"
-    >
-      <rect width="100" height="100" rx="22" fill="url(#orca-bg)" />
-      {/* Волна — 3 плавных горба Q-bezier, центрирована в верхней части */}
-      <path
-        d="M 10 62 Q 24 22 40 58 Q 56 14 72 54 Q 82 20 90 44"
-        stroke="white"
-        strokeWidth="12"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        fill="none"
-      />
-      {/* Горизонтальная полоса внизу */}
-      <rect x="17" y="78" width="66" height="11" rx="5.5" fill="white" />
-      <defs>
-        <linearGradient id="orca-bg" x1="0" y1="100" x2="100" y2="0" gradientUnits="userSpaceOnUse">
-          <stop offset="0%" stopColor="#2C27C0" />
-          <stop offset="100%" stopColor="#5C59FF" />
-        </linearGradient>
-      </defs>
-    </svg>
-  );
+  // eslint-disable-next-line @next/next/no-img-element
+  return <img src="/logo.png" alt="Орка" className={className} />;
 }
 
 export function OrcaWordmarkText({ className = "" }: { className?: string }) {

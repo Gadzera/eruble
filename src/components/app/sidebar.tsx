@@ -1,7 +1,7 @@
 import Link from "next/link";
 import {
   LayoutDashboard, Wallet, Send, FileSpreadsheet, ListChecks, Users, BarChart3,
-  Plug, ShieldCheck, Settings, BookOpen,
+  Plug, ShieldCheck, Settings, BookOpen, FileDown,
 } from "lucide-react";
 import { OrcaWordmark, DigitalRubleMark } from "./logo";
 import { SidebarLink } from "./sidebar-link";
@@ -34,6 +34,16 @@ export function Sidebar() {
           </SidebarLink>
         ))}
       </nav>
+      <div className="px-2 pb-2">
+        <a
+          href="/memorandum.pdf"
+          download="Инвесторский_меморандум_Платформа_ЦР.pdf"
+          className="flex items-center gap-2.5 w-full rounded-lg px-3 py-2.5 text-sm font-medium bg-primary/10 text-primary border border-primary/20 hover:bg-primary/15 transition-colors"
+        >
+          <FileDown className="h-4 w-4 shrink-0" />
+          Инвестиционный меморандум
+        </a>
+      </div>
       <div className="border-t px-4 py-3">
         <div className="text-[11px] text-muted-foreground space-y-0.5">
           <div className="flex items-center gap-1.5">
