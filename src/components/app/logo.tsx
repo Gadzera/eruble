@@ -7,19 +7,19 @@ export function OrcaWordmark({ className = "", large = false }: { className?: st
           src="/logo.png"
           alt=""
           aria-hidden
-          className={large ? "h-24 w-24 rounded-3xl" : "h-12 w-12 rounded-2xl"}
+          className={large ? "h-24 w-24 rounded-3xl" : "h-8 w-8 rounded-xl"}
           style={{ mixBlendMode: "multiply" }}
         />
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src="/logo2.png"
           alt="Орка"
-          className={large ? "h-16 w-auto" : "h-9 w-auto"}
+          className={large ? "h-16 w-auto" : "h-5 w-auto"}
           style={{ objectFit: "contain", objectPosition: "left center", mixBlendMode: "multiply" }}
         />
       </div>
       <span
-        className={`${large ? "text-[13px] pl-[112px]" : "text-[10px] pl-[58px]"} text-muted-foreground tracking-widest uppercase font-medium`}
+        className={`${large ? "text-[13px] pl-[112px]" : "text-[10px] pl-[40px]"} text-muted-foreground tracking-widest uppercase font-medium`}
       >
         Цифровой рубль · B2B
       </span>
