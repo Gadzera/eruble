@@ -9,7 +9,7 @@ import {
   arrayMove, SortableContext, useSortable, horizontalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { Settings2, RotateCcw, GripVertical, Copy, RefreshCw } from "lucide-react";
+import { Settings2, RotateCcw, GripVertical, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
@@ -350,7 +350,7 @@ export function OperationsTable({ ops }: { ops: OpRow[] }) {
   }
 
   const visible = (hydrated ? cols : DEFAULT_COLS).filter(c => c.visible);
-  const tableMinWidth = visible.reduce((s, c) => s + (widths[c.id] ?? DEFAULT_WIDTHS[c.id] ?? 100), 0) + 60;
+  const tableMinWidth = visible.reduce((s, c) => s + (widths[c.id] ?? DEFAULT_WIDTHS[c.id] ?? 100), 0) + 36;
 
   return (
     <div>
@@ -372,7 +372,7 @@ export function OperationsTable({ ops }: { ops: OpRow[] }) {
                     />
                   ))}
                 </SortableContext>
-                <TableHead className="w-[60px]" />
+                <TableHead className="w-[36px]" />
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -390,15 +390,9 @@ export function OperationsTable({ ops }: { ops: OpRow[] }) {
                   onClick={() => router.push(`/operations?op=${op.id}`)}
                 >
                   {visible.map(c => <Cell key={c.id} colId={c.id} op={op} />)}
-                  <TableCell className="p-1 w-[60px]" onClick={e => e.stopPropagation()}>
-                    <div className="flex items-center justify-end gap-0.5">
+                  <TableCell className="p-1 w-[36px]" onClick={e => e.stopPropagation()}>
+                    <div className="flex items-center justify-end">
                       {op.type === "B2B_TRANSFER" && <RepeatButton op={op} />}
-                      <Button variant="ghost" size="icon"
-                        className="h-7 w-7 opacity-0 group-hover:opacity-40 hover:!opacity-100 transition-opacity"
-                        onClick={() => navigator.clipboard?.writeText(op.id)}
-                        aria-label="Скопировать ID">
-                        <Copy className="h-3.5 w-3.5" />
-                      </Button>
                     </div>
                   </TableCell>
                 </TableRow>
