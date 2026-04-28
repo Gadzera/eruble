@@ -1,24 +1,25 @@
 export function OrcaWordmark({ className = "", large = false }: { className?: string; large?: boolean }) {
   return (
-    <div className={`flex flex-col gap-1 ${className}`}>
-      <div className={`flex items-center ${large ? "gap-3" : "gap-2"}`}>
+    <div className={`flex flex-col gap-1.5 ${className}`}>
+      <div className={`flex items-center ${large ? "gap-4" : "gap-2.5"}`}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src="/logo.png"
           alt=""
           aria-hidden
-          className={large ? "h-14 w-14 rounded-2xl shadow-md" : "h-9 w-9 rounded-xl shadow-sm"}
+          className={large ? "h-24 w-24 rounded-3xl" : "h-12 w-12 rounded-2xl"}
+          style={{ mixBlendMode: "multiply" }}
         />
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src="/logo2.png"
           alt="Орка"
-          className={large ? "h-8 w-auto" : "h-5 w-auto"}
-          style={{ objectFit: "contain", objectPosition: "left center" }}
+          className={large ? "h-16 w-auto" : "h-9 w-auto"}
+          style={{ objectFit: "contain", objectPosition: "left center", mixBlendMode: "multiply" }}
         />
       </div>
       <span
-        className={`${large ? "text-[12px] pl-[68px]" : "text-[9.5px] pl-[44px]"} text-muted-foreground tracking-widest uppercase font-medium`}
+        className={`${large ? "text-[13px] pl-[112px]" : "text-[10px] pl-[58px]"} text-muted-foreground tracking-widest uppercase font-medium`}
       >
         Цифровой рубль · B2B
       </span>
