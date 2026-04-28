@@ -63,7 +63,7 @@ export function OrcaWordmark({ className = "", large = false }: { className?: st
   return (
     <div className={`flex items-center gap-2.5 ${className}`}>
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src="/logo.png" alt="" aria-hidden className="h-12 w-12 rounded-2xl shrink-0" />
+      <img src="/logo.png" alt="" aria-hidden className="h-16 w-16 rounded-2xl shrink-0" />
       <div className="flex flex-col leading-none gap-0.5">
         <span className="text-[17px] font-bold tracking-[-0.02em] text-foreground">Орка</span>
         <span className="text-[10.5px] text-muted-foreground tracking-wide uppercase">
