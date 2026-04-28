@@ -1,28 +1,53 @@
 export function OrcaWordmark({ className = "", large = false }: { className?: string; large?: boolean }) {
-  return (
-    <div className={`flex flex-col gap-1.5 ${className}`}>
-      <div className={`flex items-center ${large ? "gap-4" : "gap-2.5"}`}>
+  if (large) {
+    return (
+      <div className={`flex items-center gap-5 ${className}`}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src="/logo.png"
           alt=""
           aria-hidden
-          className={large ? "h-24 w-24 rounded-3xl" : "h-8 w-8 rounded-xl"}
+          className="h-24 w-24 rounded-3xl shrink-0"
           style={{ mixBlendMode: "multiply" }}
         />
+        <div className="flex flex-col gap-1.5">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/logo2.png"
+            alt="Орка"
+            className="h-14 w-auto"
+            style={{ objectFit: "contain", objectPosition: "left center", mixBlendMode: "multiply" }}
+          />
+          <span className="text-[13px] text-muted-foreground tracking-widest uppercase font-medium">
+            Цифровой рубль · B2B
+          </span>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className={`flex items-center gap-2 ${className}`}>
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src="/logo.png"
+        alt=""
+        aria-hidden
+        className="h-8 w-8 rounded-xl shrink-0"
+        style={{ mixBlendMode: "multiply" }}
+      />
+      <div className="flex flex-col gap-0.5">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src="/logo2.png"
           alt="Орка"
-          className={large ? "h-16 w-auto" : "h-5 w-auto"}
+          className="h-5 w-auto"
           style={{ objectFit: "contain", objectPosition: "left center", mixBlendMode: "multiply" }}
         />
+        <span className="text-[9px] text-muted-foreground tracking-widest uppercase font-medium">
+          Цифровой рубль · B2B
+        </span>
       </div>
-      <span
-        className={`${large ? "text-[13px] pl-[112px]" : "text-[10px] pl-[40px]"} text-muted-foreground tracking-widest uppercase font-medium`}
-      >
-        Цифровой рубль · B2B
-      </span>
     </div>
   );
 }
