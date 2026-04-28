@@ -208,12 +208,16 @@ export function seedIfEmpty(db: DB): void {
 
   function statusForDay(dAgo: number, opIdx: number) {
     const t = at(dAgo, 12);
+    // Сегодня (d=0): черновики
     if (dAgo === 0) return { sd: "DRAFT", sb: null, sp: null, se: null, submittedAt: null, executedAt: null };
-    if (dAgo === 1) return opIdx % 3 === 0
-      ? { sd: "DRAFT", sb: null, sp: null, se: null, submittedAt: null, executedAt: null }
-      : { sd: "PENDING_APPROVAL", sb: null, sp: null, se: null, submittedAt: null, executedAt: null };
-    if (dAgo === 2) return { sd: "PENDING_APPROVAL", sb: null, sp: null, se: null, submittedAt: null, executedAt: null };
-    if (dAgo === 3) return { sd: "SUBMITTED", sb: "ACCEPTED_BY_BANK", sp: "IN_PROCESS", se: "NOT_POSTED", submittedAt: t + 2 * 60_000, executedAt: null };
+    // Вчера (d=1): большинство исполнено, пара на согласовании для реализма
+    if (dAgo === 1) return opIdx % 5 === 0
+      ? { sd: "PENDING_APPROVAL", sb: null, sp: null, se: null, submittedAt: null, executedAt: null }
+      : { sd: "EXECUTED", sb: "ACCEPTED_BY_BANK", sp: "EXECUTED", se: "RECONCILED", submittedAt: t + 2 * 60_000, executedAt: t + 10 * 60_000 };
+    // Позавчера (d=2): исполнено, один отклонён
+    if (dAgo === 2) return opIdx % 15 === 0
+      ? { sd: "REJECTED", sb: "REJECTED_BY_BANK", sp: null, se: null, submittedAt: t + 90_000, executedAt: null }
+      : { sd: "EXECUTED", sb: "ACCEPTED_BY_BANK", sp: "EXECUTED", se: "RECONCILED", submittedAt: t + 2 * 60_000, executedAt: t + 10 * 60_000 };
     if (opIdx % 20 === 0) return { sd: "REJECTED", sb: "REJECTED_BY_BANK", sp: null, se: null, submittedAt: t + 90_000, executedAt: null };
     return {
       sd: "EXECUTED", sb: "ACCEPTED_BY_BANK", sp: "EXECUTED",
