@@ -1,4 +1,3 @@
-import { nanoid } from "nanoid";
 import * as schema from "./schema";
 import { drizzle } from "drizzle-orm/better-sqlite3";
 
@@ -12,7 +11,9 @@ export function seedIfEmpty(db: DB): void {
   const daysAgo = (d: number) => now - d * 86400_000;
   const minAgo  = (m: number) => now - m * 60_000;
   const at      = (dAgo: number, hour: number) => daysAgo(dAgo) - (new Date(daysAgo(dAgo)).getHours() - hour) * 3_600_000;
-  const rid = (p: string) => `${p}_${nanoid(10)}`;
+  let _seq = 0;
+  const rid = (p: string) => `${p}_${String(++_seq).padStart(6, "0")}`;
+  const sid = (len: number) => String(++_seq).padStart(len, "0");
 
   const orgMain = {
     id: "org_tps", inn: "7716250565",
@@ -103,8 +104,8 @@ export function seedIfEmpty(db: DB): void {
         recipientInn: null, recipientName: null, recipientDrRef: null, counterpartyId: null,
         amountCents: top, purpose: "Пополнение ЦР-счёта с расчётного счёта организации",
         statusDashboard: "EXECUTED", statusBank: "ACCEPTED_BY_BANK", statusPlatform: "EXECUTED", statusErp: "RECONCILED",
-        cbrMessageId: nanoid(12), cbrMessageVersion: "2026.07", cbrOrderVersion: "2026.1",
-        idempotencyKey: nanoid(16), registryId: null, createdById: uTrs.id,
+        cbrMessageId: sid(12), cbrMessageVersion: "2026.07", cbrOrderVersion: "2026.1",
+        idempotencyKey: sid(16), registryId: null, createdById: uTrs.id,
         createdAt: t, submittedAt: t + 60_000, executedAt: t + 5 * 60_000,
       });
       balance += top;
@@ -119,8 +120,8 @@ export function seedIfEmpty(db: DB): void {
       recipientInn: null, recipientName: null, recipientDrRef: null, counterpartyId: null,
       amountCents: a, purpose: "Пополнение ЦР-счёта с расчётного счёта организации",
       statusDashboard: "EXECUTED", statusBank: "ACCEPTED_BY_BANK", statusPlatform: "EXECUTED", statusErp: "RECONCILED",
-      cbrMessageId: nanoid(12), cbrMessageVersion: "2026.07", cbrOrderVersion: "2026.1",
-      idempotencyKey: nanoid(16), registryId: null, createdById: uTrs.id,
+      cbrMessageId: sid(12), cbrMessageVersion: "2026.07", cbrOrderVersion: "2026.1",
+      idempotencyKey: sid(16), registryId: null, createdById: uTrs.id,
       createdAt: t, submittedAt: t + 60_000, executedAt: t + 5 * 60_000,
     });
     balance += a;
@@ -135,8 +136,8 @@ export function seedIfEmpty(db: DB): void {
       recipientInn: null, recipientName: null, recipientDrRef: null, counterpartyId: null,
       amountCents: a, purpose: "Вывод средств с ЦР-счёта на расчётный счёт организации",
       statusDashboard: "EXECUTED", statusBank: "ACCEPTED_BY_BANK", statusPlatform: "EXECUTED", statusErp: "RECONCILED",
-      cbrMessageId: nanoid(12), cbrMessageVersion: "2026.07", cbrOrderVersion: "2026.1",
-      idempotencyKey: nanoid(16), registryId: null, createdById: uCFO.id,
+      cbrMessageId: sid(12), cbrMessageVersion: "2026.07", cbrOrderVersion: "2026.1",
+      idempotencyKey: sid(16), registryId: null, createdById: uCFO.id,
       createdAt: t, submittedAt: t + 60_000, executedAt: t + 6 * 60_000,
     });
     balance -= a;
@@ -163,8 +164,8 @@ export function seedIfEmpty(db: DB): void {
       counterpartyId: cpObj.id, amountCents: a,
       purpose: `Оплата по счёту-фактуре №ЭТП-2026/${qrInvNum++} за ${product}`,
       statusDashboard: "EXECUTED", statusBank: "ACCEPTED_BY_BANK", statusPlatform: "EXECUTED", statusErp: "RECONCILED",
-      cbrMessageId: nanoid(12), cbrMessageVersion: "2026.07", cbrOrderVersion: "2026.1",
-      idempotencyKey: nanoid(16), registryId: null, createdById: uTrs.id,
+      cbrMessageId: sid(12), cbrMessageVersion: "2026.07", cbrOrderVersion: "2026.1",
+      idempotencyKey: sid(16), registryId: null, createdById: uTrs.id,
       createdAt: t, submittedAt: t + 30_000, executedAt: t + 3 * 60_000,
     });
     balance += a;
@@ -238,8 +239,8 @@ export function seedIfEmpty(db: DB): void {
       recipientInn: cpObj.inn, recipientName: cpObj.name, recipientDrRef: cpObj.drAccountRef,
       counterpartyId: cpObj.id, amountCents: a, purpose,
       statusDashboard: st.sd, statusBank: st.sb, statusPlatform: st.sp, statusErp: st.se,
-      cbrMessageId: st.sb ? nanoid(12) : null, cbrMessageVersion: "2026.07", cbrOrderVersion: "2026.1",
-      idempotencyKey: nanoid(16), registryId: null, createdById: createdBy.id,
+      cbrMessageId: st.sb ? sid(12) : null, cbrMessageVersion: "2026.07", cbrOrderVersion: "2026.1",
+      idempotencyKey: sid(16), registryId: null, createdById: createdBy.id,
       createdAt: t, submittedAt: st.submittedAt, executedAt: st.executedAt,
     });
     if (st.sd === "EXECUTED") balance -= a;
@@ -370,7 +371,7 @@ export function seedIfEmpty(db: DB): void {
   for (let i = 0; i < 120; i++) {
     const a = auditActions[i % auditActions.length];
     const u = allUsers[i % allUsers.length];
-    auditEvents.push({ id: rid("aud"), orgId: orgMain.id, actorId: u.id, actorName: u.name, action: a.action, objectType: a.obj, objectId: nanoid(8), ip: `10.0.${(i * 7) % 200}.${(i * 13) % 250}`, userAgent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) Orca/1.0", payloadJson: null, severity: a.sev, createdAt: minAgo(i * 15 + (i % 5) * 3) });
+    auditEvents.push({ id: rid("aud"), orgId: orgMain.id, actorId: u.id, actorName: u.name, action: a.action, objectType: a.obj, objectId: sid(8), ip: `10.0.${(i * 7) % 200}.${(i * 13) % 250}`, userAgent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) Orca/1.0", payloadJson: null, severity: a.sev, createdAt: minAgo(i * 15 + (i % 5) * 3) });
   }
   db.insert(schema.auditEvents).values(auditEvents).run();
 

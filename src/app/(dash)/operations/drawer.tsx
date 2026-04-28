@@ -35,7 +35,7 @@ export function OperationDrawer({ operationId }: { operationId: string }) {
   const [op, setOp] = useState<Op | null>(null);
 
   useEffect(() => {
-    fetch(`/api/operations/${operationId}`).then((r) => r.json()).then(setOp);
+    fetch(`/api/operations/${operationId}`).then((r) => r.ok ? r.json() : null).then((d) => d && setOp(d));
   }, [operationId]);
 
   function close(open: boolean) {
