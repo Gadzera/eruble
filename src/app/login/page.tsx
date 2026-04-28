@@ -1,57 +1,74 @@
-import Link from "next/link";
-import { redirect } from "next/navigation";
-import { Building2, Landmark, ShieldCheck, Lock, ArrowRight } from "lucide-react";
+"use client";
+import { useState } from "react";
+import { Building2, Landmark, ShieldCheck, Lock, ArrowRight, AlertCircle } from "lucide-react";
 import { OrcaWordmark } from "@/components/app/logo";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
-import { db, schema } from "@/lib/db/client";
-import { eq } from "drizzle-orm";
-import { cookies } from "next/headers";
 
-async function loginAs(formData: FormData) {
-  "use server";
-  const userId = formData.get("user_id")?.toString();
-  if (!userId) return;
-  const c = await cookies();
-  c.set("orca_uid", userId, { path: "/", sameSite: "lax" });
-  c.delete("orca_bank");
-  redirect("/");
-}
+const DEMO_PIN = "5139";
 
 export default function LoginPage() {
-  // Demo: pull users from Альфа org for one-click login
-  const users = db
-    .select()
-    .from(schema.users)
-    .where(eq(schema.users.orgId, db.select({ id: schema.organizations.id }).from(schema.organizations).get()!.id))
-    .all();
+  const [pin, setPin] = useState("");
+  const [error, setError] = useState("");
+  const [unlocked, setUnlocked] = useState(false);
+  const [users, setUsers] = useState<{ id: string; name: string; role: string }[]>([]);
+  const [selectedUser, setSelectedUser] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  async function handlePin(e: React.FormEvent) {
+    e.preventDefault();
+    if (pin.trim() !== DEMO_PIN) {
+      setError("Неверный код доступа");
+      setPin("");
+      return;
+    }
+    setLoading(true);
+    const res = await fetch("/api/demo-users");
+    const data = await res.json();
+    setUsers(data);
+    setSelectedUser(data[0]?.id ?? "");
+    setUnlocked(true);
+    setError("");
+    setLoading(false);
+  }
+
+  async function handleLogin(e: React.FormEvent) {
+    e.preventDefault();
+    if (!selectedUser) return;
+    const resp = await fetch("/api/demo-login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ userId: selectedUser }),
+    });
+    if (resp.ok) window.location.href = "/";
+  }
 
   return (
     <div className="min-h-screen grid lg:grid-cols-2">
       {/* Left: form */}
       <div className="flex items-center justify-center p-8 bg-card">
         <div className="w-full max-w-md space-y-8">
-          <Link href="/login"><OrcaWordmark className="" /></Link>
+          <OrcaWordmark />
           <div>
             <h1 className="text-2xl font-semibold tracking-tight">Вход в систему</h1>
             <p className="text-sm text-muted-foreground mt-1.5">
-              Орка — операционная оболочка цифрового рубля для юридических лиц.
+              Операционная оболочка цифрового рубля для юридических лиц.
               Доступ предоставляется через банк-участник платформы Банка России.
             </p>
           </div>
 
           <div className="space-y-3">
-            <Button variant="outline" className="w-full justify-between h-11">
+            <Button variant="outline" className="w-full justify-between h-11" disabled>
               <span className="flex items-center gap-2">
                 <Building2 className="h-4 w-4" />
                 Войти через корпоративный SSO
               </span>
               <ArrowRight className="h-4 w-4" />
             </Button>
-            <Button variant="outline" className="w-full justify-between h-11">
+            <Button variant="outline" className="w-full justify-between h-11" disabled>
               <span className="flex items-center gap-2">
                 <Landmark className="h-4 w-4" />
                 Войти через банк-участник
@@ -69,30 +86,63 @@ export default function LoginPage() {
             </div>
           </div>
 
-          <form action={loginAs} className="space-y-3">
-            <div className="space-y-1.5">
-              <Label htmlFor="user_id">Войти как</Label>
-              <select
-                name="user_id"
-                id="user_id"
-                defaultValue={users[0]?.id}
-                className="flex h-10 w-full rounded-md border border-border bg-card px-3 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-              >
-                {users.map((u) => (
-                  <option key={u.id} value={u.id}>
-                    {u.name} — {u.role}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <Button type="submit" className="w-full h-10">
-              <Lock className="h-4 w-4" /> Открыть демо
-            </Button>
-            <p className="text-[11px] text-muted-foreground leading-relaxed">
-              На демо-стенде используются синтетические данные. Реальная аутентификация — через банк-участник
-              по правилам Положения Банка России №820-П и №833-П.
-            </p>
-          </form>
+          {!unlocked ? (
+            <form onSubmit={handlePin} className="space-y-4">
+              <div className="space-y-1.5">
+                <Label htmlFor="pin">Код доступа к демо</Label>
+                <Input
+                  id="pin"
+                  type="password"
+                  inputMode="numeric"
+                  pattern="[0-9]*"
+                  maxLength={8}
+                  placeholder="••••"
+                  value={pin}
+                  onChange={e => { setPin(e.target.value); setError(""); }}
+                  className="text-center text-xl tracking-[0.5em] h-12 font-mono"
+                  autoFocus
+                />
+                {error && (
+                  <div className="flex items-center gap-1.5 text-destructive text-xs mt-1">
+                    <AlertCircle className="h-3.5 w-3.5" />
+                    {error}
+                  </div>
+                )}
+              </div>
+              <Button type="submit" className="w-full h-10" disabled={pin.length === 0 || loading}>
+                <Lock className="h-4 w-4" /> Войти в демо
+              </Button>
+              <p className="text-[11px] text-muted-foreground leading-relaxed">
+                Демо-стенд защищён кодом доступа. Используются синтетические данные.
+                Реальная аутентификация — через банк-участник по правилам Положения Банка России №820-П.
+              </p>
+            </form>
+          ) : (
+            <form onSubmit={handleLogin} className="space-y-3">
+              <div className="space-y-1.5">
+                <Label htmlFor="user_id">Войти как</Label>
+                <select
+                  id="user_id"
+                  value={selectedUser}
+                  onChange={e => setSelectedUser(e.target.value)}
+                  className="flex h-10 w-full rounded-md border border-border bg-card px-3 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                >
+                  {users.map((u) => (
+                    <option key={u.id} value={u.id}>
+                      {u.name} — {u.role}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <Button type="submit" className="w-full h-10">
+                <Lock className="h-4 w-4" /> Открыть демо
+              </Button>
+              <p className="text-[11px] text-muted-foreground leading-relaxed">
+                На демо-стенде используются синтетические данные. Реальная аутентификация — через банк-участник
+                по правилам Положения Банка России №820-П и №833-П.
+              </p>
+            </form>
+          )}
         </div>
       </div>
 
@@ -129,7 +179,7 @@ export default function LoginPage() {
         </div>
 
         <div className="text-xs text-primary-foreground/70 tabular">
-          Орка · MVP-стенд · Песочница ЦБ · Альбомы 2026.07 / 2026.1
+          ООО «НПК Технопром-Сервис» · MVP-стенд · Песочница ЦБ · Альбомы 2026.07 / 2026.1
         </div>
       </div>
     </div>
