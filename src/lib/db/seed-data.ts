@@ -1,6 +1,8 @@
 import { nanoid } from "nanoid";
 import * as schema from "./schema";
-import type { DB } from "./client";
+import { drizzle } from "drizzle-orm/better-sqlite3";
+
+type DB = ReturnType<typeof drizzle<typeof schema>>;
 
 export function seedIfEmpty(db: DB): void {
   const existing = db.select().from(schema.organizations).all();

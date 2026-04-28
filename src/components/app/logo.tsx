@@ -1,26 +1,19 @@
-export function OrcaLogo({ className = "h-7 w-auto" }: { className?: string }) {
-  // eslint-disable-next-line @next/next/no-img-element
-  return <img src="/logo.png" alt="Орка" className={className} />;
-}
-
+/** О₽ка wordmark — SVG text, scales at any size */
 export function OrcaWordmarkText({ className = "" }: { className?: string }) {
   return (
-    <span className={`font-bold tracking-[-0.02em] text-foreground ${className}`}>
-      Орка
+    <span className={`font-black tracking-[-0.03em] text-foreground ${className}`}>
+      О₽ка
     </span>
   );
 }
 
 export function OrcaWordmark({ className = "", large = false }: { className?: string; large?: boolean }) {
   return (
-    <div className={`flex items-center ${large ? "gap-4" : "gap-2.5"} ${className}`}>
-      <OrcaLogo className={large ? "h-14 w-auto" : "h-8 w-auto"} />
-      <div className="flex flex-col leading-none gap-1">
-        <OrcaWordmarkText className={large ? "text-[28px]" : "text-[17px]"} />
-        <span className={`${large ? "text-[13px]" : "text-[10.5px]"} text-muted-foreground tracking-wide uppercase`}>
-          Цифровой рубль · B2B
-        </span>
-      </div>
+    <div className={`flex flex-col leading-none gap-1 ${className}`}>
+      <OrcaWordmarkText className={large ? "text-[42px]" : "text-[22px]"} />
+      <span className={`${large ? "text-[13px]" : "text-[10.5px]"} text-muted-foreground tracking-wide uppercase`}>
+        Цифровой рубль · B2B
+      </span>
     </div>
   );
 }

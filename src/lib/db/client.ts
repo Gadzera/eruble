@@ -218,4 +218,4 @@ export const db = drizzle(sqlite, { schema });
 export { schema };
 export type DB = typeof db;
 
-seedIfEmpty(db);
+try { seedIfEmpty(db); } catch (e) { console.error("[seed] failed:", e); }
