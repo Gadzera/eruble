@@ -8,17 +8,17 @@ export function OrcaLogo({ className = "h-7 w-auto" }: { className?: string }) {
       aria-label="Орка"
     >
       <rect width="100" height="100" rx="22" fill="url(#orca-bg)" />
-      {/* Волна — 3 плавных горба Q-bezier */}
+      {/* Волна — 3 плавных горба Q-bezier, центрирована в верхней части */}
       <path
-        d="M 8 76 Q 22 14 36 72 Q 50 8 64 64 Q 76 6 89 46"
+        d="M 10 62 Q 24 22 40 58 Q 56 14 72 54 Q 82 20 90 44"
         stroke="white"
-        strokeWidth="11.5"
+        strokeWidth="12"
         strokeLinecap="round"
         strokeLinejoin="round"
         fill="none"
       />
       {/* Горизонтальная полоса внизу */}
-      <rect x="17" y="83" width="66" height="11" rx="5.5" fill="white" />
+      <rect x="17" y="78" width="66" height="11" rx="5.5" fill="white" />
       <defs>
         <linearGradient id="orca-bg" x1="0" y1="100" x2="100" y2="0" gradientUnits="userSpaceOnUse">
           <stop offset="0%" stopColor="#2C27C0" />
