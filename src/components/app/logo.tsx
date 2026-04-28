@@ -59,10 +59,11 @@ export function OrcaWordmark({ className = "", large = false }: { className?: st
     );
   }
 
-  // Дашборд (сайдбар): SVG-иконка + текст «Орка»
+  // Дашборд (сайдбар): logo.png + текст «Орка»
   return (
     <div className={`flex items-center gap-2.5 ${className}`}>
-      <OrcaLogo className="h-8 w-auto shrink-0" />
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src="/logo.png" alt="" aria-hidden className="h-8 w-8 rounded-xl shrink-0" />
       <div className="flex flex-col leading-none gap-0.5">
         <span className="text-[17px] font-bold tracking-[-0.02em] text-foreground">Орка</span>
         <span className="text-[10.5px] text-muted-foreground tracking-wide uppercase">
