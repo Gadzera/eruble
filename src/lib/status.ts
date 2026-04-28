@@ -128,7 +128,7 @@ export const roleLabel: Record<string, string> = {
   Approver: "Согласующий",
   Signer: "Подписант",
   ChiefAccountant: "Главный бухгалтер",
-  CFO: "Финансовый директор",
+  CFO: "Генеральный директор",
   Compliance: "Комплаенс-офицер",
   Security: "Офицер безопасности",
   Admin: "Администратор",

@@ -28,7 +28,7 @@ export function seedIfEmpty(db: DB): void {
   };
   db.insert(schema.organizations).values([orgMain, orgBeta]).run();
 
-  const uCFO  = { id: "usr_cfo", orgId: orgMain.id, email: "gadzera@tp-s.ru",  name: "Гадзера А.Н.", role: "CFO",             status: "ACTIVE", createdAt: daysAgo(395) };
+  const uCFO  = { id: "usr_cfo", orgId: orgMain.id, email: "an@tp-s.ru",       name: "Гадзера А.Н.", role: "CFO",             status: "ACTIVE", createdAt: daysAgo(395) };
   const uTrs  = { id: "usr_trs", orgId: orgMain.id, email: "orlova@tp-s.ru",   name: "Орлова Е.В.",  role: "Treasurer",       status: "ACTIVE", createdAt: daysAgo(390) };
   const uPay  = { id: "usr_pay", orgId: orgMain.id, email: "nikitin@tp-s.ru",  name: "Никитин П.М.", role: "Payroll",         status: "ACTIVE", createdAt: daysAgo(385) };
   const uApp  = { id: "usr_app", orgId: orgMain.id, email: "sorokina@tp-s.ru", name: "Сорокина О.И.",role: "Approver",        status: "ACTIVE", createdAt: daysAgo(380) };
