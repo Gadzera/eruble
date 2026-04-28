@@ -1,14 +1,14 @@
 import { NextResponse } from "next/server";
-import { db, schema } from "@/lib/db/client";
-import { eq } from "drizzle-orm";
+
+export const DEMO_USERS = [
+  { id: "usr_cfo", name: "Гадзера А.Н.",  role: "CFO" },
+  { id: "usr_trs", name: "Орлова Е.В.",   role: "Treasurer" },
+  { id: "usr_pay", name: "Никитин П.М.",  role: "Payroll" },
+  { id: "usr_app", name: "Сорокина О.И.", role: "Approver" },
+  { id: "usr_ca",  name: "Борисова М.Д.", role: "ChiefAccountant" },
+  { id: "usr_adm", name: "Администратор", role: "Admin" },
+];
 
 export async function GET() {
-  const org = db.select({ id: schema.organizations.id }).from(schema.organizations).get();
-  if (!org) return NextResponse.json([]);
-  const users = db
-    .select({ id: schema.users.id, name: schema.users.name, role: schema.users.role })
-    .from(schema.users)
-    .where(eq(schema.users.orgId, org.id))
-    .all();
-  return NextResponse.json(users);
+  return NextResponse.json(DEMO_USERS);
 }
