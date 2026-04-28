@@ -1,24 +1,20 @@
-export function OrcaWordmark({ className = "", large = false }: { className?: string; large?: boolean }) {
-  return (
-    <div className={`flex flex-col leading-none gap-1 ${className}`}>
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src="/logo2.png"
-        alt="Орка"
-        className={large ? "h-16 w-auto" : "h-8 w-auto"}
-      />
-      <span className={`${large ? "text-[13px]" : "text-[10.5px]"} text-muted-foreground tracking-wide uppercase`}>
-        Цифровой рубль · B2B
-      </span>
-    </div>
-  );
-}
-
+/** О₽ка wordmark — SVG text, scales at any size */
 export function OrcaWordmarkText({ className = "" }: { className?: string }) {
   return (
     <span className={`font-black tracking-[-0.03em] text-foreground ${className}`}>
       О₽ка
     </span>
+  );
+}
+
+export function OrcaWordmark({ className = "", large = false }: { className?: string; large?: boolean }) {
+  return (
+    <div className={`flex flex-col leading-none gap-1 ${className}`}>
+      <OrcaWordmarkText className={large ? "text-[42px]" : "text-[22px]"} />
+      <span className={`${large ? "text-[13px]" : "text-[10.5px]"} text-muted-foreground tracking-wide uppercase`}>
+        Цифровой рубль · B2B
+      </span>
+    </div>
   );
 }
 

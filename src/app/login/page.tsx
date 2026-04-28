@@ -2,7 +2,6 @@
 import { useState } from "react";
 import { Building2, Landmark, ShieldCheck, Lock, ArrowRight, AlertCircle } from "lucide-react";
 import { OrcaWordmark } from "@/components/app/logo";
-import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -13,9 +12,6 @@ const DEMO_PIN = "5139";
 export default function LoginPage() {
   const [pin, setPin] = useState("");
   const [error, setError] = useState("");
-  const [unlocked, setUnlocked] = useState(false);
-  const [users, setUsers] = useState<{ id: string; name: string; role: string }[]>([]);
-  const [selectedUser, setSelectedUser] = useState("");
   const [loading, setLoading] = useState(false);
 
   async function handlePin(e: React.FormEvent) {
@@ -26,24 +22,30 @@ export default function LoginPage() {
       return;
     }
     setLoading(true);
-    const res = await fetch("/api/demo-users");
-    const data = await res.json();
-    setUsers(data);
-    setSelectedUser(data[0]?.id ?? "");
-    setUnlocked(true);
-    setError("");
-    setLoading(false);
-  }
-
-  async function handleLogin(e: React.FormEvent) {
-    e.preventDefault();
-    if (!selectedUser) return;
-    const resp = await fetch("/api/demo-login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ userId: selectedUser }),
-    });
-    if (resp.ok) window.location.href = "/";
+    try {
+      const res = await fetch("/api/demo-users");
+      const data = await res.json();
+      const mainUser = data[0];
+      if (!mainUser) {
+        setError("Ошибка инициализации демо-данных");
+        setLoading(false);
+        return;
+      }
+      const resp = await fetch("/api/demo-login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId: mainUser.id }),
+      });
+      if (resp.ok) {
+        window.location.href = "/";
+      } else {
+        setError("Ошибка входа. Попробуйте ещё раз.");
+        setLoading(false);
+      }
+    } catch {
+      setError("Ошибка соединения. Попробуйте ещё раз.");
+      setLoading(false);
+    }
   }
 
   return (
@@ -86,63 +88,36 @@ export default function LoginPage() {
             </div>
           </div>
 
-          {!unlocked ? (
-            <form onSubmit={handlePin} className="space-y-4">
-              <div className="space-y-1.5">
-                <Label htmlFor="pin">Код доступа к демо</Label>
-                <Input
-                  id="pin"
-                  type="password"
-                  inputMode="numeric"
-                  pattern="[0-9]*"
-                  maxLength={8}
-                  placeholder="••••"
-                  value={pin}
-                  onChange={e => { setPin(e.target.value); setError(""); }}
-                  className="text-center text-xl tracking-[0.5em] h-12 font-mono"
-                  autoFocus
-                />
-                {error && (
-                  <div className="flex items-center gap-1.5 text-destructive text-xs mt-1">
-                    <AlertCircle className="h-3.5 w-3.5" />
-                    {error}
-                  </div>
-                )}
-              </div>
-              <Button type="submit" className="w-full h-10" disabled={pin.length === 0 || loading}>
-                <Lock className="h-4 w-4" /> Войти в демо
-              </Button>
-              <p className="text-[11px] text-muted-foreground leading-relaxed">
-                Демо-стенд защищён кодом доступа. Используются синтетические данные.
-                Реальная аутентификация — через банк-участник по правилам Положения Банка России №820-П.
-              </p>
-            </form>
-          ) : (
-            <form onSubmit={handleLogin} className="space-y-3">
-              <div className="space-y-1.5">
-                <Label htmlFor="user_id">Войти как</Label>
-                <select
-                  id="user_id"
-                  value={selectedUser}
-                  onChange={e => setSelectedUser(e.target.value)}
-                  className="flex h-10 w-full rounded-md border border-border bg-card px-3 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                >
-                  {users.map((u) => (
-                    <option key={u.id} value={u.id}>
-                      {u.name} — {u.role}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <Button type="submit" className="w-full h-10">
-                <Lock className="h-4 w-4" /> Открыть демо
-              </Button>
-              <p className="text-[11px] text-muted-foreground leading-relaxed">
-                На демо-стенде используются синтетические данные. Реальная аутентификация — через банк-участник
-                по правилам Положения Банка России №820-П и №833-П.
-              </p>
-            </form>
-          )}
+          <form onSubmit={handlePin} className="space-y-4">
+            <div className="space-y-1.5">
+              <Label htmlFor="pin">Код доступа к демо</Label>
+              <Input
+                id="pin"
+                type="password"
+                inputMode="numeric"
+                pattern="[0-9]*"
+                maxLength={8}
+                placeholder="••••"
+                value={pin}
+                onChange={e => { setPin(e.target.value); setError(""); }}
+                className="text-center text-xl tracking-[0.5em] h-12 font-mono"
+                autoFocus
+              />
+              {error && (
+                <div className="flex items-center gap-1.5 text-destructive text-xs mt-1">
+                  <AlertCircle className="h-3.5 w-3.5" />
+                  {error}
+                </div>
+              )}
+            </div>
+            <Button type="submit" className="w-full h-10" disabled={pin.length === 0 || loading}>
+              <Lock className="h-4 w-4" /> {loading ? "Входим…" : "Войти в демо"}
+            </Button>
+            <p className="text-[11px] text-muted-foreground leading-relaxed">
+              Демо-стенд защищён кодом доступа. Используются синтетические данные.
+              Реальная аутентификация — через банк-участник по правилам Положения Банка России №820-П.
+            </p>
+          </form>
         </div>
       </div>
 
