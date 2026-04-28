@@ -3,6 +3,7 @@ import { drizzle } from "drizzle-orm/better-sqlite3";
 import * as schema from "./schema";
 import path from "node:path";
 import fs from "node:fs";
+import { seedIfEmpty } from "./seed-data";
 
 const DB_DIR = process.env.VERCEL ? "/tmp" : path.join(process.cwd(), "data");
 const DB_PATH = path.join(DB_DIR, "orca.db");
@@ -217,6 +218,4 @@ export const db = drizzle(sqlite, { schema });
 export { schema };
 export type DB = typeof db;
 
-// Auto-seed on first cold start (needed for Vercel where /tmp starts empty)
-import { seedIfEmpty } from "./seed-data";
 seedIfEmpty(db);

@@ -10,39 +10,39 @@ export function seedIfEmpty(db: DB): void {
   const daysAgo = (d: number) => now - d * 86400_000;
   const minAgo  = (m: number) => now - m * 60_000;
   const at      = (dAgo: number, hour: number) => daysAgo(dAgo) - (new Date(daysAgo(dAgo)).getHours() - hour) * 3_600_000;
-  const id = (p: string) => `${p}_${nanoid(10)}`;
+  const rid = (p: string) => `${p}_${nanoid(10)}`;
 
   const orgMain = {
-    id: id("org"), inn: "7716250565",
+    id: "org_tps", inn: "7716250565",
     name: 'Общество с ограниченной ответственностью "НПК Технопром-Сервис"',
     shortName: 'ООО "НПК Технопром-Сервис"',
     locale: "ru-RU", timezone: "Europe/Moscow", createdAt: daysAgo(400),
   };
   const orgBeta = {
-    id: id("org"), inn: "7702000002",
+    id: "org_beta", inn: "7702000002",
     name: 'Общество с ограниченной ответственностью "Бета Логистика"',
     shortName: 'ООО "Бета Логистика"',
     locale: "ru-RU", timezone: "Europe/Moscow", createdAt: daysAgo(300),
   };
   db.insert(schema.organizations).values([orgMain, orgBeta]).run();
 
-  const uCFO  = { id: id("usr"), orgId: orgMain.id, email: "gadzera@tp-s.ru",  name: "Гадзера А.Н.", role: "CFO",             status: "ACTIVE", createdAt: daysAgo(395) };
-  const uTrs  = { id: id("usr"), orgId: orgMain.id, email: "orlova@tp-s.ru",   name: "Орлова Е.В.",  role: "Treasurer",       status: "ACTIVE", createdAt: daysAgo(390) };
-  const uPay  = { id: id("usr"), orgId: orgMain.id, email: "nikitin@tp-s.ru",  name: "Никитин П.М.", role: "Payroll",         status: "ACTIVE", createdAt: daysAgo(385) };
-  const uApp  = { id: id("usr"), orgId: orgMain.id, email: "sorokina@tp-s.ru", name: "Сорокина О.И.",role: "Approver",        status: "ACTIVE", createdAt: daysAgo(380) };
-  const uCA   = { id: id("usr"), orgId: orgMain.id, email: "borisova@tp-s.ru", name: "Борисова М.Д.",role: "ChiefAccountant", status: "ACTIVE", createdAt: daysAgo(375) };
-  const uAdm  = { id: id("usr"), orgId: orgMain.id, email: "info@tp-s.ru",     name: "Администратор",role: "Admin",           status: "ACTIVE", createdAt: daysAgo(400) };
+  const uCFO  = { id: "usr_cfo", orgId: orgMain.id, email: "gadzera@tp-s.ru",  name: "Гадзера А.Н.", role: "CFO",             status: "ACTIVE", createdAt: daysAgo(395) };
+  const uTrs  = { id: "usr_trs", orgId: orgMain.id, email: "orlova@tp-s.ru",   name: "Орлова Е.В.",  role: "Treasurer",       status: "ACTIVE", createdAt: daysAgo(390) };
+  const uPay  = { id: "usr_pay", orgId: orgMain.id, email: "nikitin@tp-s.ru",  name: "Никитин П.М.", role: "Payroll",         status: "ACTIVE", createdAt: daysAgo(385) };
+  const uApp  = { id: "usr_app", orgId: orgMain.id, email: "sorokina@tp-s.ru", name: "Сорокина О.И.",role: "Approver",        status: "ACTIVE", createdAt: daysAgo(380) };
+  const uCA   = { id: "usr_ca",  orgId: orgMain.id, email: "borisova@tp-s.ru", name: "Борисова М.Д.",role: "ChiefAccountant", status: "ACTIVE", createdAt: daysAgo(375) };
+  const uAdm  = { id: "usr_adm", orgId: orgMain.id, email: "info@tp-s.ru",     name: "Администратор",role: "Admin",           status: "ACTIVE", createdAt: daysAgo(400) };
   db.insert(schema.users).values([uCFO, uTrs, uPay, uApp, uCA, uAdm]).run();
 
-  const sber = { id: id("bnk"), code: "SBER", name: "ПАО Сбербанк",    shortName: "Сбер",  status: "ACTIVE",   cbrAlbumVersion: "2026.07", createdAt: daysAgo(400) };
-  const vtb  = { id: id("bnk"), code: "VTB",  name: "Банк ВТБ (ПАО)", shortName: "ВТБ",   status: "ACTIVE",   cbrAlbumVersion: "2026.07", createdAt: daysAgo(400) };
-  const alfa = { id: id("bnk"), code: "ALFA", name: 'АО "Альфа-Банк"',shortName: "Альфа", status: "DEGRADED", cbrAlbumVersion: "2026.06", createdAt: daysAgo(400) };
+  const sber = { id: "bnk_sber", code: "SBER", name: "ПАО Сбербанк",    shortName: "Сбер",  status: "ACTIVE",   cbrAlbumVersion: "2026.07", createdAt: daysAgo(400) };
+  const vtb  = { id: "bnk_vtb",  code: "VTB",  name: "Банк ВТБ (ПАО)", shortName: "ВТБ",   status: "ACTIVE",   cbrAlbumVersion: "2026.07", createdAt: daysAgo(400) };
+  const alfa = { id: "bnk_alfa", code: "ALFA", name: 'АО "Альфа-Банк"',shortName: "Альфа", status: "DEGRADED", cbrAlbumVersion: "2026.06", createdAt: daysAgo(400) };
   db.insert(schema.banks).values([sber, vtb, alfa]).run();
   db.insert(schema.bankAccess).values([
-    { id: id("ba"), orgId: orgMain.id, bankId: sber.id, status: "ACTIVE", isDefault: 1, createdAt: daysAgo(395) },
-    { id: id("ba"), orgId: orgMain.id, bankId: vtb.id,  status: "ACTIVE", isDefault: 0, createdAt: daysAgo(350) },
-    { id: id("ba"), orgId: orgMain.id, bankId: alfa.id, status: "ACTIVE", isDefault: 0, createdAt: daysAgo(280) },
-    { id: id("ba"), orgId: orgBeta.id, bankId: vtb.id,  status: "ACTIVE", isDefault: 1, createdAt: daysAgo(290) },
+    { id: rid("ba"), orgId: orgMain.id, bankId: sber.id, status: "ACTIVE", isDefault: 1, createdAt: daysAgo(395) },
+    { id: rid("ba"), orgId: orgMain.id, bankId: vtb.id,  status: "ACTIVE", isDefault: 0, createdAt: daysAgo(350) },
+    { id: rid("ba"), orgId: orgMain.id, bankId: alfa.id, status: "ACTIVE", isDefault: 0, createdAt: daysAgo(280) },
+    { id: rid("ba"), orgId: orgBeta.id, bankId: vtb.id,  status: "ACTIVE", isDefault: 1, createdAt: daysAgo(290) },
   ]).run();
 
   type CpDef = { inn: string; name: string; legalType: string; category: string; risk: string };
@@ -74,7 +74,7 @@ export function seedIfEmpty(db: DB): void {
     { inn: "9701000000", name: 'ООО "РесурсТрейд"',             legalType: "ЮЛ", category: "SUPPLIER", risk: "HIGH"   },
   ];
   const counterparties = cpDefs.map((cp, i) => ({
-    id: id("cp"), orgId: orgMain.id, inn: cp.inn, name: cp.name, legalType: cp.legalType,
+    id: `cp_${i}`, orgId: orgMain.id, inn: cp.inn, name: cp.name, legalType: cp.legalType,
     drAccountRef: `DR${String(200 + i).padStart(12, "0")}`,
     status: cp.risk === "HIGH" ? "BLOCKED" : i >= 23 ? "ARCHIVED" : "ACTIVE",
     riskLevel: cp.risk, category: cp.category,
@@ -97,7 +97,7 @@ export function seedIfEmpty(db: DB): void {
       const top = Math.ceil((needed + 80_000_000 - balance) / 10_000_000) * 10_000_000;
       const t = at(dAgo, 8) - hourOffset * 3_600_000;
       ops.push({
-        id: id("cin"), orgId: orgMain.id, type: "CASH_IN", bankId: sber.id,
+        id: rid("cin"), orgId: orgMain.id, type: "CASH_IN", bankId: sber.id,
         recipientInn: null, recipientName: null, recipientDrRef: null, counterpartyId: null,
         amountCents: top, purpose: "Пополнение ЦР-счёта с расчётного счёта организации",
         statusDashboard: "EXECUTED", statusBank: "ACCEPTED_BY_BANK", statusPlatform: "EXECUTED", statusErp: "RECONCILED",
@@ -113,7 +113,7 @@ export function seedIfEmpty(db: DB): void {
     const t = at(dAgo, 8);
     const a = amountK * 1_000_00;
     ops.push({
-      id: id("cin"), orgId: orgMain.id, type: "CASH_IN", bankId: sber.id,
+      id: rid("cin"), orgId: orgMain.id, type: "CASH_IN", bankId: sber.id,
       recipientInn: null, recipientName: null, recipientDrRef: null, counterpartyId: null,
       amountCents: a, purpose: "Пополнение ЦР-счёта с расчётного счёта организации",
       statusDashboard: "EXECUTED", statusBank: "ACCEPTED_BY_BANK", statusPlatform: "EXECUTED", statusErp: "RECONCILED",
@@ -129,7 +129,7 @@ export function seedIfEmpty(db: DB): void {
     ensureBalance(a, dAgo);
     const t = at(dAgo, 16);
     ops.push({
-      id: id("cout"), orgId: orgMain.id, type: "CASH_OUT", bankId: sber.id,
+      id: rid("cout"), orgId: orgMain.id, type: "CASH_OUT", bankId: sber.id,
       recipientInn: null, recipientName: null, recipientDrRef: null, counterpartyId: null,
       amountCents: a, purpose: "Вывод средств с ЦР-счёта на расчётный счёт организации",
       statusDashboard: "EXECUTED", statusBank: "ACCEPTED_BY_BANK", statusPlatform: "EXECUTED", statusErp: "RECONCILED",
@@ -156,7 +156,7 @@ export function seedIfEmpty(db: DB): void {
     const cpObj = counterparties[cpIdx];
     const product = qrProducts[(cpIdx + Math.floor(dAgo / 7)) % qrProducts.length];
     ops.push({
-      id: id("qrs"), orgId: orgMain.id, type: "QR_SETTLEMENT", bankId: sber.id,
+      id: rid("qrs"), orgId: orgMain.id, type: "QR_SETTLEMENT", bankId: sber.id,
       recipientInn: cpObj.inn, recipientName: cpObj.name, recipientDrRef: cpObj.drAccountRef,
       counterpartyId: cpObj.id, amountCents: a,
       purpose: `Оплата по счёту-фактуре №ЭТП-2026/${qrInvNum++} за ${product}`,
@@ -227,7 +227,7 @@ export function seedIfEmpty(db: DB): void {
     const t = at(dAgo, hour);
     const cpObj = counterparties[cpIdx];
     ops.push({
-      id: id("pay"), orgId: orgMain.id, type: "B2B_TRANSFER",
+      id: rid("pay"), orgId: orgMain.id, type: "B2B_TRANSFER",
       bankId: banks[opIdx % 3].id,
       recipientInn: cpObj.inn, recipientName: cpObj.name, recipientDrRef: cpObj.drAccountRef,
       counterpartyId: cpObj.id, amountCents: a, purpose,
@@ -295,26 +295,26 @@ export function seedIfEmpty(db: DB): void {
     (s, o) => s + ((o.type === "CASH_IN" || o.type === "QR_SETTLEMENT") ? o.amountCents : -o.amountCents), 0,
   );
   db.insert(schema.wallets).values([
-    { id: id("wlt"), orgId: orgMain.id, externalRef: "DR000000000001", balanceCents: OPENING_CENTS + netCents, blockedCents: 0, status: "ACTIVE", lastSyncAt: minAgo(2), createdAt: daysAgo(400) },
-    { id: id("wlt"), orgId: orgBeta.id, externalRef: "DR000000000045", balanceCents: 890_000_00,              blockedCents: 0, status: "ACTIVE", lastSyncAt: minAgo(15), createdAt: daysAgo(300) },
+    { id: rid("wlt"), orgId: orgMain.id, externalRef: "DR000000000001", balanceCents: OPENING_CENTS + netCents, blockedCents: 0, status: "ACTIVE", lastSyncAt: minAgo(2), createdAt: daysAgo(400) },
+    { id: rid("wlt"), orgId: orgBeta.id, externalRef: "DR000000000045", balanceCents: 890_000_00,              blockedCents: 0, status: "ACTIVE", lastSyncAt: minAgo(15), createdAt: daysAgo(300) },
   ]).run();
 
   const regPayroll = {
-    id: id("reg"), orgId: orgMain.id, type: "PAYROLL", source: "1C",
+    id: rid("reg"), orgId: orgMain.id, type: "PAYROLL", source: "1C",
     fileName: "zarplata_2026_04.xml", bankId: vtb.id,
     rowsTotal: 64, rowsValid: 62, rowsInvalid: 2, rowsExecuted: 62, rowsRejected: 0,
     totalAmountCents: 5_480_000_00, status: "EXECUTED", approvalPolicy: "DUAL_SIGNATURE",
     createdById: uPay.id, createdAt: daysAgo(5), submittedAt: daysAgo(5) + 2 * 3600_000,
   };
   const regVendor = {
-    id: id("reg"), orgId: orgMain.id, type: "VENDOR", source: "CSV",
+    id: rid("reg"), orgId: orgMain.id, type: "VENDOR", source: "CSV",
     fileName: "suppliers_april.csv", bankId: sber.id,
     rowsTotal: 18, rowsValid: 18, rowsInvalid: 0, rowsExecuted: 0, rowsRejected: 0,
     totalAmountCents: 3_240_000_00, status: "PENDING_APPROVAL", approvalPolicy: "STANDARD",
     createdById: uTrs.id, createdAt: minAgo(40), submittedAt: null,
   };
   const regTax = {
-    id: id("reg"), orgId: orgMain.id, type: "TAX", source: "XLSX",
+    id: rid("reg"), orgId: orgMain.id, type: "TAX", source: "XLSX",
     fileName: "nalog_Q1_2026.xlsx", bankId: sber.id,
     rowsTotal: 8, rowsValid: 7, rowsInvalid: 1, rowsExecuted: 0, rowsRejected: 0,
     totalAmountCents: 1_850_000_00, status: "VALIDATED", approvalPolicy: "STANDARD",
@@ -325,25 +325,25 @@ export function seedIfEmpty(db: DB): void {
   const items: Array<typeof schema.registryItems.$inferInsert> = [];
   for (let i = 0; i < regPayroll.rowsTotal; i++) {
     const valid = i < regPayroll.rowsValid;
-    items.push({ id: id("ri"), registryId: regPayroll.id, rowNumber: i + 1, recipientInn: null, recipientName: `Сотрудник №${2000 + i}`, recipientDrRef: `DR${String(3000 + i).padStart(12, "0")}`, amountCents: (60 + (i * 7) % 100) * 1_000_00, purpose: "Заработная плата за апрель 2026", status: valid ? "EXECUTED" : "INVALID", errorCode: valid ? null : "INVALID_DR_ACCOUNT", errorMessage: valid ? null : "Не найден ЦР-счёт получателя", operationId: null });
+    items.push({ id: rid("ri"), registryId: regPayroll.id, rowNumber: i + 1, recipientInn: null, recipientName: `Сотрудник №${2000 + i}`, recipientDrRef: `DR${String(3000 + i).padStart(12, "0")}`, amountCents: (60 + (i * 7) % 100) * 1_000_00, purpose: "Заработная плата за апрель 2026", status: valid ? "EXECUTED" : "INVALID", errorCode: valid ? null : "INVALID_DR_ACCOUNT", errorMessage: valid ? null : "Не найден ЦР-счёт получателя", operationId: null });
   }
   for (let i = 0; i < regVendor.rowsTotal; i++) {
     const cpObj = counterparties[i % 13];
-    items.push({ id: id("ri"), registryId: regVendor.id, rowNumber: i + 1, recipientInn: cpObj.inn, recipientName: cpObj.name, recipientDrRef: cpObj.drAccountRef, amountCents: (80 + (i * 17) % 300) * 1_000_00, purpose: `Оплата по договору поставки №${200 + i}`, status: "VALID", errorCode: null, errorMessage: null, operationId: null });
+    items.push({ id: rid("ri"), registryId: regVendor.id, rowNumber: i + 1, recipientInn: cpObj.inn, recipientName: cpObj.name, recipientDrRef: cpObj.drAccountRef, amountCents: (80 + (i * 17) % 300) * 1_000_00, purpose: `Оплата по договору поставки №${200 + i}`, status: "VALID", errorCode: null, errorMessage: null, operationId: null });
   }
   for (let i = 0; i < regTax.rowsTotal; i++) {
     const valid = i < regTax.rowsValid;
-    items.push({ id: id("ri"), registryId: regTax.id, rowNumber: i + 1, recipientInn: "7707030001", recipientName: "ФНС России", recipientDrRef: "DR999000000001", amountCents: (100 + (i * 29) % 200) * 1_000_00, purpose: "Уплата налога Q1 2026, КБК 18210101011011000110", status: valid ? "VALID" : "INVALID", errorCode: valid ? null : "MISSING_KBK", errorMessage: valid ? null : "Не указан КБК", operationId: null });
+    items.push({ id: rid("ri"), registryId: regTax.id, rowNumber: i + 1, recipientInn: "7707030001", recipientName: "ФНС России", recipientDrRef: "DR999000000001", amountCents: (100 + (i * 29) % 200) * 1_000_00, purpose: "Уплата налога Q1 2026, КБК 18210101011011000110", status: valid ? "VALID" : "INVALID", errorCode: valid ? null : "MISSING_KBK", errorMessage: valid ? null : "Не указан КБК", operationId: null });
   }
   db.insert(schema.registryItems).values(items).run();
 
   const pendingOps = ops.filter(o => o.statusDashboard === "PENDING_APPROVAL");
   const approvals: Array<typeof schema.approvalTasks.$inferInsert> = [
-    { id: id("apr"), orgId: orgMain.id, operationId: null, registryId: regVendor.id, approverRole: "CFO",             approverUserId: uCFO.id, status: "PENDING", reason: null, createdAt: regVendor.createdAt, completedAt: null },
-    { id: id("apr"), orgId: orgMain.id, operationId: null, registryId: regVendor.id, approverRole: "ChiefAccountant", approverUserId: uCA.id,  status: "PENDING", reason: null, createdAt: regVendor.createdAt, completedAt: null },
+    { id: rid("apr"), orgId: orgMain.id, operationId: null, registryId: regVendor.id, approverRole: "CFO",             approverUserId: uCFO.id, status: "PENDING", reason: null, createdAt: regVendor.createdAt, completedAt: null },
+    { id: rid("apr"), orgId: orgMain.id, operationId: null, registryId: regVendor.id, approverRole: "ChiefAccountant", approverUserId: uCA.id,  status: "PENDING", reason: null, createdAt: regVendor.createdAt, completedAt: null },
   ];
   for (const p of pendingOps.slice(0, 5)) {
-    approvals.push({ id: id("apr"), orgId: orgMain.id, operationId: p.id, registryId: null, approverRole: "Approver", approverUserId: uApp.id, status: "PENDING", reason: null, createdAt: p.createdAt, completedAt: null });
+    approvals.push({ id: rid("apr"), orgId: orgMain.id, operationId: p.id, registryId: null, approverRole: "Approver", approverUserId: uApp.id, status: "PENDING", reason: null, createdAt: p.createdAt, completedAt: null });
   }
   db.insert(schema.approvalTasks).values(approvals).run();
 
@@ -364,14 +364,14 @@ export function seedIfEmpty(db: DB): void {
   for (let i = 0; i < 120; i++) {
     const a = auditActions[i % auditActions.length];
     const u = allUsers[i % allUsers.length];
-    auditEvents.push({ id: id("aud"), orgId: orgMain.id, actorId: u.id, actorName: u.name, action: a.action, objectType: a.obj, objectId: nanoid(8), ip: `10.0.${(i * 7) % 200}.${(i * 13) % 250}`, userAgent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) Orca/1.0", payloadJson: null, severity: a.sev, createdAt: minAgo(i * 15 + (i % 5) * 3) });
+    auditEvents.push({ id: rid("aud"), orgId: orgMain.id, actorId: u.id, actorName: u.name, action: a.action, objectType: a.obj, objectId: nanoid(8), ip: `10.0.${(i * 7) % 200}.${(i * 13) % 250}`, userAgent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) Orca/1.0", payloadJson: null, severity: a.sev, createdAt: minAgo(i * 15 + (i % 5) * 3) });
   }
   db.insert(schema.auditEvents).values(auditEvents).run();
 
   db.insert(schema.notifications).values([
-    { id: id("ntf"), orgId: orgMain.id, userId: uCFO.id, type: "approval", severity: "WARN", title: "Реестр поставщикам ждёт согласования",    body: "18 платежей на сумму 3 240 000,00 ₽",      link: `/registries/${regVendor.id}`,  readAt: null,       createdAt: minAgo(15) },
-    { id: id("ntf"), orgId: orgMain.id, userId: uTrs.id, type: "status",   severity: "INFO", title: "Реестр зарплат исполнен",                  body: "62 платежа на 5 480 000,00 ₽ — успешно",  link: `/registries/${regPayroll.id}`, readAt: minAgo(60), createdAt: daysAgo(5) },
-    { id: id("ntf"), orgId: orgMain.id, userId: null,    type: "system",   severity: "WARN", title: 'Канал банка "Альфа" работает с задержкой', body: "Среднее время отклика > 4 сек.",            link: "/integrations",                readAt: null,       createdAt: minAgo(10) },
-    { id: id("ntf"), orgId: orgMain.id, userId: uCA.id,  type: "regtech",  severity: "INFO", title: "Запрос ФНС зарегистрирован",               body: "Запрос №ФНС-2026-04-1841 за период Q1 2026", link: "/audit",                     readAt: null,       createdAt: minAgo(200) },
+    { id: rid("ntf"), orgId: orgMain.id, userId: uCFO.id, type: "approval", severity: "WARN", title: "Реестр поставщикам ждёт согласования",    body: "18 платежей на сумму 3 240 000,00 ₽",      link: `/registries/${regVendor.id}`,  readAt: null,       createdAt: minAgo(15) },
+    { id: rid("ntf"), orgId: orgMain.id, userId: uTrs.id, type: "status",   severity: "INFO", title: "Реестр зарплат исполнен",                  body: "62 платежа на 5 480 000,00 ₽ — успешно",  link: `/registries/${regPayroll.id}`, readAt: minAgo(60), createdAt: daysAgo(5) },
+    { id: rid("ntf"), orgId: orgMain.id, userId: null,    type: "system",   severity: "WARN", title: 'Канал банка "Альфа" работает с задержкой', body: "Среднее время отклика > 4 сек.",            link: "/integrations",                readAt: null,       createdAt: minAgo(10) },
+    { id: rid("ntf"), orgId: orgMain.id, userId: uCA.id,  type: "regtech",  severity: "INFO", title: "Запрос ФНС зарегистрирован",               body: "Запрос №ФНС-2026-04-1841 за период Q1 2026", link: "/audit",                     readAt: null,       createdAt: minAgo(200) },
   ]).run();
 }
