@@ -4,7 +4,7 @@ import * as schema from "./schema";
 import path from "node:path";
 import fs from "node:fs";
 
-const DB_DIR = process.env.VERCEL ? "/tmp/data" : path.join(process.cwd(), "data");
+const DB_DIR = process.env.VERCEL ? "/tmp" : path.join(process.cwd(), "data");
 const DB_PATH = path.join(DB_DIR, "orca.db");
 
 if (!fs.existsSync(DB_DIR)) fs.mkdirSync(DB_DIR, { recursive: true });
@@ -216,3 +216,7 @@ CREATE INDEX IF NOT EXISTS idx_notif_user ON notifications(user_id, read_at, cre
 export const db = drizzle(sqlite, { schema });
 export { schema };
 export type DB = typeof db;
+
+// Auto-seed on first cold start (needed for Vercel where /tmp starts empty)
+import { seedIfEmpty } from "./seed-data";
+seedIfEmpty(db);
