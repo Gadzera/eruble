@@ -1,38 +1,38 @@
-/** Иконка — синий квадрат с волной и горизонтальной полосой */
 export function OrcaLogo({ className = "h-7 w-auto" }: { className?: string }) {
   return (
-    <svg className={className} viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Орка">
+    <svg
+      className={className}
+      viewBox="0 0 100 100"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      aria-label="Орка"
+    >
       <rect width="100" height="100" rx="22" fill="url(#orca-bg)" />
-      {/* Волна — три пика */}
+      {/* Волна — 3 плавных горба Q-bezier */}
       <path
-        d="M15 63 L29 38 L43 58 L57 38 L72 58"
-        stroke="white" strokeWidth="9.5" strokeLinecap="round" strokeLinejoin="round"
+        d="M 8 76 Q 22 14 36 72 Q 50 8 64 64 Q 76 6 89 46"
+        stroke="white"
+        strokeWidth="11.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        fill="none"
       />
-      {/* Диагональный штрих */}
-      <path
-        d="M18 72 L74 27"
-        stroke="white" strokeWidth="9.5" strokeLinecap="round"
-      />
-      {/* Горизонтальная полоса */}
-      <rect x="19" y="81" width="62" height="10" rx="5" fill="white" />
+      {/* Горизонтальная полоса внизу */}
+      <rect x="17" y="83" width="66" height="11" rx="5.5" fill="white" />
       <defs>
-        <linearGradient id="orca-bg" x1="0" y1="0" x2="100" y2="100" gradientUnits="userSpaceOnUse">
-          <stop stopColor="#4B60FF" />
-          <stop offset="1" stopColor="#2318B0" />
+        <linearGradient id="orca-bg" x1="0" y1="100" x2="100" y2="0" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stopColor="#2C27C0" />
+          <stop offset="100%" stopColor="#5C59FF" />
         </linearGradient>
       </defs>
     </svg>
   );
 }
 
-/**
- * Текстовый логотип «О₽ка» — «р» визуально заменена символом рубля,
- * что передаёт айдентику CBDC-платформы.
- */
 export function OrcaWordmarkText({ className = "" }: { className?: string }) {
   return (
     <span className={`font-bold tracking-[-0.02em] text-foreground ${className}`}>
-      О<span className="text-[0.92em]">₽</span>ка
+      Орка
     </span>
   );
 }
