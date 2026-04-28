@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build --turbopack",
-    "start": "next start",
+    "start": "next start -p ${PORT:-3000}",
     "lint": "eslint",
     "db:seed": "tsx scripts/seed.ts",
     "db:reset": "node -e \"require('node:fs').rmSync('data', { recursive: true, force: true }); console.log('reset')\" && npm run db:seed"

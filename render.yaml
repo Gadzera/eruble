@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: eruble-demo
+    runtime: node
+    buildCommand: npm ci && npm run build && npm run db:seed
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+    plan: free
