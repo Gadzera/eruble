@@ -77,6 +77,7 @@ export default async function OperationsPage({
         bankShort: banks.find((b) => b.bank.id === op.bankId)?.bank.shortName ?? null,
         recipientInn: op.recipientInn,
         recipientName: op.recipientName,
+        recipientDrRef: op.recipientDrRef,
         purpose: op.purpose,
         amountCents: op.amountCents,
         statusDashboard: op.statusDashboard,

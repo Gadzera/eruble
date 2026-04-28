@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback, useRef, type RefObject } from "react";
 import { useRouter } from "next/navigation";
 import {
   DndContext, closestCenter, PointerSensor,
@@ -9,7 +9,7 @@ import {
   arrayMove, SortableContext, useSortable, horizontalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { Settings2, RotateCcw, GripVertical, Copy } from "lucide-react";
+import { Settings2, RotateCcw, GripVertical, Copy, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
@@ -27,6 +27,7 @@ export type OpRow = {
   bankShort: string | null;
   recipientInn: string | null;
   recipientName: string | null;
+  recipientDrRef: string | null;
   purpose: string | null;
   amountCents: number;
   statusDashboard: string;
@@ -86,6 +87,43 @@ function loadWidths(): Record<string, number> {
     if (!raw) return DEFAULT_WIDTHS;
     return { ...DEFAULT_WIDTHS, ...JSON.parse(raw) };
   } catch { return DEFAULT_WIDTHS; }
+}
+
+// ── Repeat-payment button with 1s delayed tooltip ───────────────────────────
+function RepeatButton({ op }: { op: OpRow }) {
+  const router = useRouter();
+  const [show, setShow] = useState(false);
+  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  function onEnter() { timer.current = setTimeout(() => setShow(true), 1000); }
+  function onLeave() { if (timer.current) clearTimeout(timer.current); setShow(false); }
+
+  function handleClick(e: React.MouseEvent) {
+    e.stopPropagation();
+    const p = new URLSearchParams();
+    if (op.recipientInn)  p.set("inn",     op.recipientInn);
+    if (op.recipientName) p.set("name",    op.recipientName);
+    if (op.recipientDrRef) p.set("dr",     op.recipientDrRef);
+    p.set("amount",  String(op.amountCents / 100));
+    if (op.purpose)       p.set("purpose", op.purpose);
+    router.push(`/payments/new?${p.toString()}`);
+  }
+
+  return (
+    <div className="relative" onMouseEnter={onEnter} onMouseLeave={onLeave}>
+      <Button variant="ghost" size="icon"
+        className="h-7 w-7 opacity-0 group-hover:opacity-40 hover:!opacity-100 transition-opacity"
+        onClick={handleClick}
+        aria-label="Повторить платёж">
+        <RefreshCw className="h-3.5 w-3.5" />
+      </Button>
+      {show && (
+        <div className="absolute bottom-full right-0 mb-1.5 whitespace-nowrap rounded-md bg-foreground px-2 py-1 text-[11px] text-background shadow-md pointer-events-none z-50">
+          Повторить платёж
+        </div>
+      )}
+    </div>
+  );
 }
 
 // ── Column visibility popover (order via in-table drag) ─────────────────────
@@ -353,7 +391,8 @@ export function OperationsTable({ ops }: { ops: OpRow[] }) {
                 >
                   {visible.map(c => <Cell key={c.id} colId={c.id} op={op} />)}
                   <TableCell className="p-1 w-[60px]" onClick={e => e.stopPropagation()}>
-                    <div className="flex items-center justify-end">
+                    <div className="flex items-center justify-end gap-0.5">
+                      {op.type === "B2B_TRANSFER" && <RepeatButton op={op} />}
                       <Button variant="ghost" size="icon"
                         className="h-7 w-7 opacity-0 group-hover:opacity-40 hover:!opacity-100 transition-opacity"
                         onClick={() => navigator.clipboard?.writeText(op.id)}

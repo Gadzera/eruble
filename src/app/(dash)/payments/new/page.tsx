@@ -3,16 +3,29 @@ import { getBanksForOrg, getWallet, listCounterparties } from "@/lib/queries";
 import { PaymentForm } from "./payment-form";
 import { PageHeader } from "@/components/app/page-header";
 
-export default async function NewPaymentPage() {
+export default async function NewPaymentPage({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string>>;
+}) {
   const session = await requireSession();
   const banks = getBanksForOrg(session.orgId);
   const wallet = getWallet(session.orgId)!;
   const counterparties = listCounterparties(session.orgId).filter((c) => c.status === "ACTIVE");
+  const sp = await searchParams;
+
+  const prefill = sp.inn ? {
+    recipient_inn:    sp.inn    ?? "",
+    recipient_name:   sp.name   ?? "",
+    recipient_dr_ref: sp.dr     ?? "",
+    amount:           sp.amount ? Number(sp.amount) : undefined,
+    purpose:          sp.purpose ?? "",
+  } : undefined;
 
   return (
     <>
       <PageHeader
-        title="Единичный B2B-перевод"
+        title={prefill ? "Повторить платёж" : "Единичный B2B-перевод"}
         description="Перевод цифровых рублей юридическому лицу. После подписания распоряжение направляется в банк-участник, далее на платформу Банка России (альбом 2026.1)."
       />
       <PaymentForm
@@ -38,6 +51,7 @@ export default async function NewPaymentPage() {
           legalType: c.legalType,
           verifiedAt: c.verifiedAt,
         }))}
+        prefill={prefill}
       />
     </>
   );

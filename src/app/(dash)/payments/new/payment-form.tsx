@@ -60,6 +60,14 @@ type Counterparty = {
   verifiedAt: number | null;
 };
 
+type Prefill = {
+  recipient_inn?: string;
+  recipient_name?: string;
+  recipient_dr_ref?: string;
+  amount?: number;
+  purpose?: string;
+};
+
 type Props = {
   defaultBankAccessId: string;
   banks: { accessId: string; bankShort: string; bankName: string; status: string }[];
@@ -67,10 +75,11 @@ type Props = {
   payerOrgName: string;
   payerInn: string;
   counterparties: Counterparty[];
+  prefill?: Prefill;
 };
 
 export function PaymentForm({
-  defaultBankAccessId, banks, availableBalanceRub, payerOrgName, payerInn, counterparties,
+  defaultBankAccessId, banks, availableBalanceRub, payerOrgName, payerInn, counterparties, prefill,
 }: Props) {
   const router = useRouter();
   const [pending, start] = useTransition();
@@ -87,10 +96,12 @@ export function PaymentForm({
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     resolver: zodResolver(schema) as any,
     defaultValues: {
-      recipient_inn: "", recipient_name: "", recipient_dr_ref: "",
-      amount: undefined as unknown as number,
+      recipient_inn: prefill?.recipient_inn ?? "",
+      recipient_name: prefill?.recipient_name ?? "",
+      recipient_dr_ref: prefill?.recipient_dr_ref ?? "",
+      amount: prefill?.amount ?? undefined as unknown as number,
       vat_rate: "NONE",
-      purpose: "",
+      purpose: prefill?.purpose ?? "",
       bank_access_id: defaultBankAccessId,
       execution_date: new Date().toISOString().slice(0, 10),
     },
