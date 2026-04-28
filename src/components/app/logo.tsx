@@ -59,12 +59,18 @@ export function OrcaWordmark({ className = "", large = false }: { className?: st
     );
   }
 
-  // Дашборд (сайдбар): оригинальный SVG-логотип + текст
+  // Дашборд (сайдбар): SVG-иконка + logo2.png
   return (
     <div className={`flex items-center gap-2.5 ${className}`}>
-      <OrcaLogo className="h-8 w-auto" />
+      <OrcaLogo className="h-8 w-auto shrink-0" />
       <div className="flex flex-col leading-none gap-0.5">
-        <OrcaWordmarkText className="text-[17px]" />
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/logo2.png"
+          alt="Орка"
+          className="h-5 w-auto"
+          style={{ objectFit: "contain", objectPosition: "left center", mixBlendMode: "multiply" }}
+        />
         <span className="text-[10.5px] text-muted-foreground tracking-wide uppercase">
           Цифровой рубль · B2B
         </span>
