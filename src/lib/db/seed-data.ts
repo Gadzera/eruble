@@ -14,8 +14,8 @@ export function seedIfEmpty(db: DB): void {
 
   const orgMain = {
     id: "org_tps", inn: "7716250565",
-    name: 'Общество с ограниченной ответственностью "НПК Технопром-Сервис"',
-    shortName: 'ООО "НПК Технопром-Сервис"',
+    name: 'Общество с ограниченной ответственностью "НПК ТехноПром-Сервис"',
+    shortName: 'ООО "НПК ТехноПром-Сервис"',
     locale: "ru-RU", timezone: "Europe/Moscow", createdAt: daysAgo(400),
   };
   const orgBeta = {

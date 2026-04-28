@@ -177,7 +177,7 @@ export default async function HomePage() {
 
       {/* Footer */}
       <div className="mt-8 pt-4 border-t flex flex-col sm:flex-row items-center justify-between gap-2 text-[11px] text-muted-foreground">
-        <span>© 2026 ООО &quot;НПК Технопром-Сервис&quot; · ИНН 7716250565</span>
+        <span>© 2026 ООО &quot;НПК ТехноПром-Сервис&quot; · ИНН 7716250565</span>
         <span>Разработано: <span className="font-medium text-foreground/70">Гадзера Александр Николаевич</span></span>
       </div>
     </>

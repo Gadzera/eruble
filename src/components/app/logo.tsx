@@ -11,13 +11,13 @@ export function OrcaWordmarkText({ className = "" }: { className?: string }) {
   );
 }
 
-export function OrcaWordmark({ className = "" }: { className?: string }) {
+export function OrcaWordmark({ className = "", large = false }: { className?: string; large?: boolean }) {
   return (
-    <div className={`flex items-center gap-2.5 ${className}`}>
-      <OrcaLogo className="h-8 w-auto" />
-      <div className="flex flex-col leading-none gap-0.5">
-        <OrcaWordmarkText className="text-[17px]" />
-        <span className="text-[10.5px] text-muted-foreground tracking-wide uppercase">
+    <div className={`flex items-center ${large ? "gap-4" : "gap-2.5"} ${className}`}>
+      <OrcaLogo className={large ? "h-14 w-auto" : "h-8 w-auto"} />
+      <div className="flex flex-col leading-none gap-1">
+        <OrcaWordmarkText className={large ? "text-[28px]" : "text-[17px]"} />
+        <span className={`${large ? "text-[13px]" : "text-[10.5px]"} text-muted-foreground tracking-wide uppercase`}>
           Цифровой рубль · B2B
         </span>
       </div>

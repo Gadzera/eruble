@@ -51,7 +51,7 @@ export default function LoginPage() {
       {/* Left: form */}
       <div className="flex items-center justify-center p-8 bg-card">
         <div className="w-full max-w-md space-y-8">
-          <OrcaWordmark />
+          <OrcaWordmark large />
           <div>
             <h1 className="text-2xl font-semibold tracking-tight">Вход в систему</h1>
             <p className="text-sm text-muted-foreground mt-1.5">
@@ -179,7 +179,7 @@ export default function LoginPage() {
         </div>
 
         <div className="text-xs text-primary-foreground/70 tabular">
-          ООО «НПК Технопром-Сервис» · MVP-стенд · Песочница ЦБ · Альбомы 2026.07 / 2026.1
+          ООО «НПК ТехноПром-Сервис» · MVP-стенд · Песочница ЦБ · Альбомы 2026.07 / 2026.1
         </div>
       </div>
     </div>

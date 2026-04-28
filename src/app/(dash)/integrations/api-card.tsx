@@ -16,7 +16,7 @@ info:
     Авторизация — Bearer-токен (OAuth 2.0 client_credentials).
     Версия Альбома CBR: 2026.07.
   contact:
-    name: НПК Технопром-Сервис
+    name: НПК ТехноПром-Сервис
     email: info@tp-s.ru
 
 servers:
