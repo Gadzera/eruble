@@ -1,6 +1,38 @@
+/** Иконка — синий квадрат с волной и горизонтальной полосой */
+export function OrcaLogo({ className = "h-7 w-auto" }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Орка">
+      <rect width="100" height="100" rx="22" fill="url(#orca-bg)" />
+      <path
+        d="M15 63 L29 38 L43 58 L57 38 L72 58"
+        stroke="white" strokeWidth="9.5" strokeLinecap="round" strokeLinejoin="round"
+      />
+      <path
+        d="M18 72 L74 27"
+        stroke="white" strokeWidth="9.5" strokeLinecap="round"
+      />
+      <rect x="19" y="81" width="62" height="10" rx="5" fill="white" />
+      <defs>
+        <linearGradient id="orca-bg" x1="0" y1="0" x2="100" y2="100" gradientUnits="userSpaceOnUse">
+          <stop stopColor="#4B60FF" />
+          <stop offset="1" stopColor="#2318B0" />
+        </linearGradient>
+      </defs>
+    </svg>
+  );
+}
+
+export function OrcaWordmarkText({ className = "" }: { className?: string }) {
+  return (
+    <span className={`font-bold tracking-[-0.02em] text-foreground ${className}`}>
+      О<span className="text-[0.92em]">₽</span>ка
+    </span>
+  );
+}
+
 export function OrcaWordmark({ className = "", large = false }: { className?: string; large?: boolean }) {
   if (large) {
-    // Login page: square icon + wordmark stacked right
+    // Страница входа: PNG-иконка + PNG-название
     return (
       <div className={`flex items-center gap-5 ${className}`}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -27,28 +59,17 @@ export function OrcaWordmark({ className = "", large = false }: { className?: st
     );
   }
 
-  // Dashboard sidebar: original layout, logo2.png only
+  // Дашборд (сайдбар): оригинальный SVG-логотип + текст
   return (
-    <div className={`flex flex-col leading-none gap-1 ${className}`}>
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src="/logo2.png"
-        alt="Орка"
-        className="h-8 w-auto"
-        style={{ mixBlendMode: "multiply" }}
-      />
-      <span className="text-[10.5px] text-muted-foreground tracking-wide uppercase">
-        Цифровой рубль · B2B
-      </span>
+    <div className={`flex items-center gap-2.5 ${className}`}>
+      <OrcaLogo className="h-8 w-auto" />
+      <div className="flex flex-col leading-none gap-0.5">
+        <OrcaWordmarkText className="text-[17px]" />
+        <span className="text-[10.5px] text-muted-foreground tracking-wide uppercase">
+          Цифровой рубль · B2B
+        </span>
+      </div>
     </div>
-  );
-}
-
-export function OrcaWordmarkText({ className = "" }: { className?: string }) {
-  return (
-    <span className={`font-black tracking-[-0.03em] text-foreground ${className}`}>
-      О₽ка
-    </span>
   );
 }
 
