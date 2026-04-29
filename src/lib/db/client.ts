@@ -87,6 +87,23 @@ CREATE TABLE IF NOT EXISTS counterparties (
   category TEXT,
   risk_level TEXT,
   notes TEXT,
+  okved TEXT,
+  okved_name TEXT,
+  region TEXT,
+  registered_at INTEGER,
+  authorized_capital INTEGER,
+  employees INTEGER,
+  employees_year INTEGER,
+  director_name TEXT,
+  director_inn TEXT,
+  director_since INTEGER,
+  fns_debt INTEGER NOT NULL DEFAULT 0,
+  fns_mass_director INTEGER NOT NULL DEFAULT 0,
+  fns_invalid INTEGER NOT NULL DEFAULT 0,
+  fns_bankrupt INTEGER NOT NULL DEFAULT 0,
+  fns_sanctions INTEGER NOT NULL DEFAULT 0,
+  fns_cb_blacklist INTEGER NOT NULL DEFAULT 0,
+  fns_checked_at INTEGER,
   status TEXT NOT NULL DEFAULT 'ACTIVE',
   verified_at INTEGER,
   created_at INTEGER NOT NULL
@@ -207,12 +224,39 @@ CREATE TABLE IF NOT EXISTS api_keys (
   revoked_at INTEGER
 );
 
+-- Migrate existing counterparties table (no-op if column already exists)
+-- SQLite does not support IF NOT EXISTS for ALTER TABLE ADD COLUMN, so we catch errors in code.
+
 CREATE INDEX IF NOT EXISTS idx_operations_org ON operations(org_id, created_at DESC);
 CREATE INDEX IF NOT EXISTS idx_operations_status ON operations(status_dashboard);
 CREATE INDEX IF NOT EXISTS idx_registries_org ON registries(org_id, created_at DESC);
 CREATE INDEX IF NOT EXISTS idx_audit_org ON audit_events(org_id, created_at DESC);
 CREATE INDEX IF NOT EXISTS idx_notif_user ON notifications(user_id, read_at, created_at DESC);
 `);
+
+// Add new columns to counterparties if they don't exist yet (SQLite migration)
+const cpMigrations = [
+  "ALTER TABLE counterparties ADD COLUMN okved TEXT",
+  "ALTER TABLE counterparties ADD COLUMN okved_name TEXT",
+  "ALTER TABLE counterparties ADD COLUMN region TEXT",
+  "ALTER TABLE counterparties ADD COLUMN registered_at INTEGER",
+  "ALTER TABLE counterparties ADD COLUMN authorized_capital INTEGER",
+  "ALTER TABLE counterparties ADD COLUMN employees INTEGER",
+  "ALTER TABLE counterparties ADD COLUMN employees_year INTEGER",
+  "ALTER TABLE counterparties ADD COLUMN director_name TEXT",
+  "ALTER TABLE counterparties ADD COLUMN director_inn TEXT",
+  "ALTER TABLE counterparties ADD COLUMN director_since INTEGER",
+  "ALTER TABLE counterparties ADD COLUMN fns_debt INTEGER NOT NULL DEFAULT 0",
+  "ALTER TABLE counterparties ADD COLUMN fns_mass_director INTEGER NOT NULL DEFAULT 0",
+  "ALTER TABLE counterparties ADD COLUMN fns_invalid INTEGER NOT NULL DEFAULT 0",
+  "ALTER TABLE counterparties ADD COLUMN fns_bankrupt INTEGER NOT NULL DEFAULT 0",
+  "ALTER TABLE counterparties ADD COLUMN fns_sanctions INTEGER NOT NULL DEFAULT 0",
+  "ALTER TABLE counterparties ADD COLUMN fns_cb_blacklist INTEGER NOT NULL DEFAULT 0",
+  "ALTER TABLE counterparties ADD COLUMN fns_checked_at INTEGER",
+];
+for (const sql of cpMigrations) {
+  try { sqlite.exec(sql); } catch { /* column already exists */ }
+}
 
 export const db = drizzle(sqlite, { schema });
 export { schema };

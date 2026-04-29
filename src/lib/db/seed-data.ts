@@ -76,6 +76,90 @@ export function seedIfEmpty(db: DB): void {
     { inn: "7703107510", name: 'ООО "1С"',                      legalType: "ЮЛ", category: "OTHER",    risk: "LOW"    },
     { inn: "9701000000", name: 'ООО "РесурсТрейд"',             legalType: "ЮЛ", category: "SUPPLIER", risk: "HIGH"   },
   ];
+  type CpExtra = {
+    kpp?: string; ogrn?: string; fullName?: string; legalAddress?: string;
+    okved?: string; okvedName?: string; region?: string; registeredAt?: number;
+    authorizedCapital?: number; employees?: number; employeesYear?: number;
+    directorName?: string; directorInn?: string; directorSince?: number;
+    fnsDebt?: number; fnsMassDirector?: number; fnsInvalid?: number;
+    fnsBankrupt?: number; fnsSanctions?: number; fnsCbBlacklist?: number;
+    fnsCheckedAt?: number;
+  };
+  const cpExtras: CpExtra[] = [
+    // 0 – ПАО Мосэнерго
+    { kpp: "770401001", ogrn: "1027700302162", fullName: 'Публичное акционерное общество "Мосэнерго"',
+      legalAddress: "119526, г. Москва, пр-т Вернадского, д. 101, корп. 3",
+      okved: "35.11", okvedName: "Производство электроэнергии", region: "г. Москва",
+      registeredAt: new Date("2002-10-16").getTime(), authorizedCapital: 39749_000_000,
+      employees: 12400, employeesYear: 2024,
+      directorName: "Рыбаков Павел Игоревич", directorInn: "770123456789", directorSince: new Date("2020-03-15").getTime(),
+      fnsDebt: 0, fnsMassDirector: 0, fnsInvalid: 0, fnsBankrupt: 0, fnsSanctions: 0, fnsCbBlacklist: 0,
+      fnsCheckedAt: daysAgo(2) },
+    // 1 – АО УралСталь
+    { kpp: "667101001", ogrn: "1026601367539", fullName: 'Акционерное общество "УралСталь"',
+      legalAddress: "462353, Оренбургская обл., г. Новотроицк, ш. Заводское, д. 1",
+      okved: "24.10", okvedName: "Производство чугуна, стали и ферросплавов", region: "Оренбургская обл.",
+      registeredAt: new Date("2002-07-01").getTime(), authorizedCapital: 14_900_000_000,
+      employees: 14200, employeesYear: 2024,
+      directorName: "Уткин Дмитрий Владимирович", directorInn: "666100112233", directorSince: new Date("2018-06-01").getTime(),
+      fnsDebt: 0, fnsMassDirector: 0, fnsInvalid: 0, fnsBankrupt: 0, fnsSanctions: 0, fnsCbBlacklist: 0,
+      fnsCheckedAt: daysAgo(5) },
+    // 2 – ПАО Россети Центр
+    { kpp: "770101001", ogrn: "1046900099498",
+      okved: "35.12", okvedName: "Передача электроэнергии", region: "г. Москва",
+      registeredAt: new Date("2004-11-17").getTime(), authorizedCapital: 41_977_000_000,
+      employees: 34500, employeesYear: 2024,
+      directorName: "Евдокимов Игорь Николаевич", directorInn: "690100887766", directorSince: new Date("2017-09-14").getTime(),
+      fnsDebt: 0, fnsMassDirector: 0, fnsInvalid: 0, fnsBankrupt: 0, fnsSanctions: 0, fnsCbBlacklist: 0,
+      fnsCheckedAt: daysAgo(3) },
+    // 3 – СтройПромГрупп (medium, подозрительный)
+    { kpp: "771401001", ogrn: "5137746157483",
+      okved: "41.20", okvedName: "Строительство жилых и нежилых зданий", region: "г. Москва",
+      registeredAt: new Date("2013-04-22").getTime(), authorizedCapital: 10_000,
+      employees: 3, employeesYear: 2024,
+      directorName: "Семёнов Артём Олегович", directorInn: "771401556677", directorSince: new Date("2021-01-11").getTime(),
+      fnsDebt: 0, fnsMassDirector: 1, fnsInvalid: 0, fnsBankrupt: 0, fnsSanctions: 0, fnsCbBlacklist: 0,
+      fnsCheckedAt: daysAgo(10) },
+    // 4 – ГидроМонтаж
+    { kpp: "772301001", okved: "43.22", okvedName: "Производство санитарно-технических работ", region: "г. Москва",
+      registeredAt: new Date("2010-08-15").getTime(), authorizedCapital: 500_000,
+      employees: 47, employeesYear: 2024,
+      directorName: "Воронов Максим Андреевич", directorInn: "772300998877", directorSince: new Date("2015-03-20").getTime(),
+      fnsDebt: 0, fnsMassDirector: 0, fnsInvalid: 0, fnsBankrupt: 0, fnsSanctions: 0, fnsCbBlacklist: 0,
+      fnsCheckedAt: daysAgo(7) },
+    // 5 – Северсталь-Дистрибуция
+    { kpp: "352801001", ogrn: "1023502683650",
+      okved: "46.72", okvedName: "Торговля оптовая металлами", region: "Вологодская обл.",
+      registeredAt: new Date("2002-03-10").getTime(), authorizedCapital: 3_000_000_000,
+      employees: 2100, employeesYear: 2024,
+      directorName: "Козлова Наталья Сергеевна", directorInn: "352800112200", directorSince: new Date("2019-07-01").getTime(),
+      fnsDebt: 0, fnsMassDirector: 0, fnsInvalid: 0, fnsBankrupt: 0, fnsSanctions: 0, fnsCbBlacklist: 0,
+      fnsCheckedAt: daysAgo(4) },
+    // 6 – ПромГрупп (medium)
+    { kpp: "504701001",
+      okved: "28.99", okvedName: "Производство прочих машин и оборудования", region: "Московская обл.",
+      registeredAt: new Date("2009-11-30").getTime(), authorizedCapital: 50_000,
+      employees: 12, employeesYear: 2024,
+      directorName: "Фёдоров Алексей Иванович", directorInn: "504700445566", directorSince: new Date("2022-02-01").getTime(),
+      fnsDebt: 1, fnsMassDirector: 0, fnsInvalid: 0, fnsBankrupt: 0, fnsSanctions: 0, fnsCbBlacklist: 0,
+      fnsCheckedAt: daysAgo(14) },
+    // 7 – АО Кировэнерго
+    { kpp: "434601001",
+      okved: "35.12", okvedName: "Передача электроэнергии", region: "Кировская обл.",
+      registeredAt: new Date("2005-09-12").getTime(), authorizedCapital: 9_800_000_000,
+      employees: 8700, employeesYear: 2024,
+      directorName: "Черных Владимир Петрович", directorInn: "434600778899", directorSince: new Date("2016-04-01").getTime(),
+      fnsDebt: 0, fnsMassDirector: 0, fnsInvalid: 0, fnsBankrupt: 0, fnsSanctions: 0, fnsCbBlacklist: 0,
+      fnsCheckedAt: daysAgo(6) },
+    // 8–24: minimal data
+    ...Array.from({ length: 17 }, (_, j) => ({
+      okved: "46.90", okvedName: "Торговля оптовая неспециализированная", region: "г. Москва",
+      registeredAt: new Date("2015-01-01").getTime() + j * 30 * 86400_000,
+      authorizedCapital: 10_000, employees: 5 + j, employeesYear: 2024,
+      fnsCheckedAt: daysAgo(7 + j),
+    })),
+  ];
+
   const counterparties = cpDefs.map((cp, i) => ({
     id: `cp_${i}`, orgId: orgMain.id, inn: cp.inn, name: cp.name, legalType: cp.legalType,
     drAccountRef: `DR${String(200 + i).padStart(12, "0")}`,
@@ -85,6 +169,7 @@ export function seedIfEmpty(db: DB): void {
       : cp.risk === "MEDIUM" ? "Требуется углублённая проверка при суммах свыше 500 000 ₽." : null,
     verifiedAt: i % 4 === 0 ? daysAgo(60) : null,
     createdAt: daysAgo(300 - i * 8),
+    ...(cpExtras[i] ?? {}),
   }));
   db.insert(schema.counterparties).values(counterparties).run();
 

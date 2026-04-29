@@ -76,6 +76,25 @@ export const counterparties = sqliteTable("counterparties", {
   category: text("category"),           // SUPPLIER | BUYER | PARTNER | TAX | OTHER
   riskLevel: text("risk_level"),        // LOW | MEDIUM | HIGH
   notes: text("notes"),
+  // Расширенные сведения (ЕГРЮЛ)
+  okved: text("okved"),                     // основной ОКВЭД, напр. "28.99.9"
+  okvedName: text("okved_name"),            // расшифровка ОКВЭД
+  region: text("region"),                   // регион, напр. "г. Москва"
+  registeredAt: integer("registered_at"),   // дата регистрации (timestamp)
+  authorizedCapital: integer("authorized_capital"), // уставный капитал, руб.
+  employees: integer("employees"),          // численность сотрудников
+  employeesYear: integer("employees_year"), // год данных о численности
+  directorName: text("director_name"),      // ФИО директора
+  directorInn: text("director_inn"),        // ИНН директора
+  directorSince: integer("director_since"), // дата назначения (timestamp)
+  // Флаги ФНС (надёжность)
+  fnsDebt: integer("fns_debt").notNull().default(0),         // налоговая задолженность
+  fnsMassDirector: integer("fns_mass_director").notNull().default(0), // массовый руководитель
+  fnsInvalid: integer("fns_invalid").notNull().default(0),   // недостоверность сведений
+  fnsBankrupt: integer("fns_bankrupt").notNull().default(0), // банкротство
+  fnsSanctions: integer("fns_sanctions").notNull().default(0), // санкционные списки
+  fnsCbBlacklist: integer("fns_cb_blacklist").notNull().default(0), // ЦБ чёрный список
+  fnsCheckedAt: integer("fns_checked_at"),                   // когда последний раз проверяли
   // Статус
   status: text("status").notNull().default("ACTIVE"), // ACTIVE | BLOCKED | ARCHIVED
   verifiedAt: integer("verified_at"),
