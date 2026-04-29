@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 
-const DEMO_PIN = "5139";
+const DEMO_PIN = "1508";
 
 export default function LoginPage() {
   const [pin, setPin] = useState("");
