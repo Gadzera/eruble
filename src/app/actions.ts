@@ -210,52 +210,6 @@ export async function verifyCounterparty(id: string) {
     .run();
   await logAudit(s, "counterparty.verify", "counterparty", id);
   revalidatePath("/counterparties");
-  revalidatePath(`/counterparties/${id}`);
-}
-
-export async function updateCounterparty(id: string, input: {
-  name?: string;
-  fullName?: string;
-  kpp?: string;
-  ogrn?: string;
-  legalAddress?: string;
-  bik?: string;
-  bankName?: string;
-  bankAccount?: string;
-  corrAccount?: string;
-  drAccountRef?: string;
-  contactPerson?: string;
-  email?: string;
-  phone?: string;
-  category?: string;
-  riskLevel?: string;
-  notes?: string;
-}) {
-  const s = await requireSession();
-  db.update(schema.counterparties)
-    .set({
-      name: input.name,
-      fullName: input.fullName || null,
-      kpp: input.kpp || null,
-      ogrn: input.ogrn || null,
-      legalAddress: input.legalAddress || null,
-      bik: input.bik || null,
-      bankName: input.bankName || null,
-      bankAccount: input.bankAccount || null,
-      corrAccount: input.corrAccount || null,
-      drAccountRef: input.drAccountRef || null,
-      contactPerson: input.contactPerson || null,
-      email: input.email || null,
-      phone: input.phone || null,
-      category: input.category || null,
-      riskLevel: input.riskLevel || null,
-      notes: input.notes || null,
-    })
-    .where(and(eq(schema.counterparties.id, id), eq(schema.counterparties.orgId, s.orgId)))
-    .run();
-  await logAudit(s, "counterparty.update", "counterparty", id, { name: input.name });
-  revalidatePath("/counterparties");
-  revalidatePath(`/counterparties/${id}`);
 }
 
 export async function setCounterpartyStatus(id: string, status: "ACTIVE" | "BLOCKED" | "ARCHIVED") {
@@ -266,7 +220,6 @@ export async function setCounterpartyStatus(id: string, status: "ACTIVE" | "BLOC
     .run();
   await logAudit(s, `counterparty.${status.toLowerCase()}`, "counterparty", id);
   revalidatePath("/counterparties");
-  revalidatePath(`/counterparties/${id}`);
 }
 
 export async function logout() {

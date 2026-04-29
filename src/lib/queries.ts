@@ -119,10 +119,6 @@ export function listCounterparties(orgId: string) {
     .all();
 }
 
-export function getCounterparty(id: string) {
-  return db.select().from(schema.counterparties).where(eq(schema.counterparties.id, id)).get();
-}
-
 export function listMyApprovals(orgId: string) {
   return db
     .select({

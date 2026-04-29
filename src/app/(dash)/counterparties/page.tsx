@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { requireSession } from "@/lib/session";
 import { listCounterparties } from "@/lib/queries";
 import { formatDate, relativeTime } from "@/lib/format";
@@ -49,14 +48,7 @@ export default async function CounterpartiesPage() {
               ) : (
                 counterparties.map((cp) => (
                   <TableRow key={cp.id}>
-                    <TableCell className="font-medium max-w-[260px] truncate">
-                      <Link
-                        href={`/counterparties/${cp.id}/osnovnoe`}
-                        className="hover:underline hover:text-primary transition-colors"
-                      >
-                        {cp.name}
-                      </Link>
-                    </TableCell>
+                    <TableCell className="font-medium max-w-[260px] truncate">{cp.name}</TableCell>
                     <TableCell className="tabular text-sm">{cp.inn}</TableCell>
                     <TableCell className="tabular text-sm text-muted-foreground">
                       {cp.drAccountRef ?? "—"}
