@@ -154,7 +154,7 @@ export default function LoginPage() {
         </div>
 
         <div className="text-xs text-primary-foreground/70 tabular">
-          ООО «НПК ТехноПром-Сервис» · MVP-стенд · Песочница ЦБ · Альбомы 2026.07 / 2026.1
+          ООО «ТЕХНОПРОМ-СЕРВИС» · MVP-стенд · Песочница ЦБ · Альбомы 2026.07 / 2026.1
         </div>
       </div>
     </div>

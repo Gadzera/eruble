@@ -9,14 +9,14 @@ import { ApiKeysSheet } from "@/components/app/api-keys-sheet";
 
 const OPENAPI_YAML = `openapi: "3.1.0"
 info:
-  title: CBDC НПК ТС API
+  title: CBDC ТЕХНОПРОМ-СЕРВИС API
   version: "1.0.0"
   description: >
     REST API для работы с цифровыми рублями через платформу Банка России.
     Авторизация — Bearer-токен (OAuth 2.0 client_credentials).
     Версия Альбома CBR: 2026.07.
   contact:
-    name: НПК ТехноПром-Сервис
+    name: ООО «ТЕХНОПРОМ-СЕРВИС»
     email: info@tp-s.ru
 
 servers:
@@ -176,7 +176,7 @@ components:
 function buildPostman(orgId: string): string {
   return JSON.stringify({
     info: {
-      name: "CBDC НПК ТС API",
+      name: "CBDC ТЕХНОПРОМ-СЕРВИС API",
       description: "REST API для работы с цифровыми рублями. Альбом CBR 2026.07.",
       version: { raw: "1.0.0" },
       schema: "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
@@ -334,7 +334,7 @@ export function ApiCard({ orgId }: { orgId: string }) {
                 <SheetTitle className="flex items-center gap-2">
                   <FileCode2 className="h-4 w-4" /> OpenAPI 3.1 Спецификация
                 </SheetTitle>
-                <SheetDescription>CBDC НПК ТС API · v1.0.0 · Альбом CBR 2026.07</SheetDescription>
+                <SheetDescription>CBDC ТЕХНОПРОМ-СЕРВИС API · v1.0.0 · Альбом CBR 2026.07</SheetDescription>
               </div>
               <div className="flex gap-2 shrink-0">
                 <Badge variant="outline" className="text-[10px]">YAML</Badge>
